@@ -38,7 +38,7 @@ export async function PATCH(
         data: {
           staffId: staff.staffId,
           action:  "CHECK_OUT",
-          details: { roomNumber: updated.room.roomNumber, checkInId, adultCount: updated.adultCount, childCount: updated.childCount },
+          details: { roomNumber: updated.room?.roomNumber ?? null, checkInId, adultCount: updated.adultCount, childCount: updated.childCount },
         },
       });
 
