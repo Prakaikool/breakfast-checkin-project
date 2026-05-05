@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Figma__get_design_context",
+      "mcp__claude_ai_Figma__get_screenshot",
+      "mcp__claude_ai_Figma__get_metadata",
+      "Bash(mkdir -p \"c:/breakfast-checkin-project/breakfast-checkin/src/app/api/spa/members/[id]\")",
+      "Bash(mkdir -p \"c:/breakfast-checkin-project/breakfast-checkin/src/app/members/[id]\")",
+      "Bash(mkdir -p backend)",
+      "Bash(mkdir -p frontend/components/layout frontend/hooks)",
+      "Bash(mkdir -p frontend/views/home frontend/views/checkin frontend/views/dashboard frontend/views/public-dash frontend/views/guests frontend/views/instruction frontend/views/daily-log frontend/views/reports frontend/views/reminders frontend/views/kitchen frontend/views/settings frontend/views/members frontend/views/login)",
+      "Bash(cp \"app/guests/[id]/GuestDetailView.tsx\" frontend/views/guests/GuestDetailView.tsx)",
+      "Bash(cp \"app/members/[id]/MemberDetailView.tsx\" frontend/views/members/MemberDetailView.tsx)",
+      "Bash(node -e ':*)"
+    ]
+  }
+}

@@ -1,0 +1,256 @@
+// ===========================================
+// BREAKFAST CHECK-IN SYSTEM — Database Schema
+// ===========================================
+// This file defines ALL database tables.
+// Run `npm run db:migrate` to apply changes.
+// Run `npm run db:studio` to view data in browser.
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ---- Staff who operate the system ----
+model Staff {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  pinHash   String    @map("pin_hash")
+  role      StaffRole @default(ENTRANCE)
+  isActive  Boolean   @default(true) @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  checkIns  CheckIn[]
+  auditLogs AuditLog[]
+
+  @@map("staff")
+}
+
+enum StaffRole {
+  ADMIN
+  SUPERVISOR
+  ENTRANCE
+  KITCHEN
+}
+
+// ---- Hotel rooms ----
+model Room {
+  id         Int      @id @default(autoincrement())
+  roomNumber String   @unique @map("room_number")
+  floor      Int      @default(1)
+  maxGuests  Int      @default(4) @map("max_guests")
+  status     RoomStatus @default(OCCUPIED)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  guests   Guest[]
+  checkIns CheckIn[]
+
+  @@map("rooms")
+}
+
+enum RoomStatus {
+  OCCUPIED
+  VACANT
+  MAINTENANCE
+}
+
+// ---- Guests staying at the hotel ----
+model Guest {
+  id           Int       @id @default(autoincrement())
+  name         String
+  roomId       Int       @map("room_id")
+  guestType    GuestType @default(HOTEL) @map("guest_type")
+  isChild      Boolean   @default(false) @map("is_child")
+  checkInDate  DateTime  @map("check_in_date")
+  checkOutDate DateTime  @map("check_out_date")
+  pmsId        String?   @map("pms_id")    // ID from hotel PMS system
+  hasBreakfast Boolean   @default(true) @map("has_breakfast")
+  notes        String?
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  room     Room      @relation(fields: [roomId], references: [id])
+  checkIns CheckIn[]
+
+  @@map("guests")
+}
+
+enum GuestType {
+  HOTEL
+  SPA
+  VIP
+  EXTERNAL
+}
+
+// ---- Breakfast sessions (one per day) ----
+model BreakfastSession {
+  id          Int            @id @default(autoincrement())
+  sessionDate DateTime       @unique @map("session_date") @db.Date
+  startTime   String         @default("07:00") @map("start_time")
+  endTime     String         @default("10:30") @map("end_time")
+  totalGuests Int            @default(0) @map("total_guests")
+  totalAdults Int            @default(0) @map("total_adults")
+  totalChildren Int          @default(0) @map("total_children")
+  status      SessionStatus  @default(OPEN)
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  checkIns CheckIn[]
+
+  @@map("breakfast_sessions")
+}
+
+enum SessionStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
+// ---- Check-in records (the heart of the system) ----
+model CheckIn {
+  id            Int       @id @default(autoincrement())
+  roomId        Int?      @map("room_id")
+  guestId       Int?      @map("guest_id")
+  staffId       Int       @map("staff_id")
+  sessionId     Int       @map("session_id")
+  adultCount    Int       @default(1) @map("adult_count")
+  childCount    Int       @default(0) @map("child_count")
+  isDuplicate   Boolean   @default(false) @map("is_duplicate")
+  isOverride    Boolean   @default(false) @map("is_override")
+  isWalkIn      Boolean   @default(false) @map("is_walk_in")
+  note          String?
+  checkedInAt   DateTime  @default(now()) @map("checked_in_at")
+  checkedOutAt  DateTime? @map("checked_out_at")
+
+  room    Room?            @relation(fields: [roomId], references: [id])
+  guest   Guest?           @relation(fields: [guestId], references: [id])
+  staff   Staff            @relation(fields: [staffId], references: [id])
+  session BreakfastSession @relation(fields: [sessionId], references: [id])
+
+  @@map("check_ins")
+}
+
+// ---- Spa / VIP members ----
+model SpaMember {
+  id         Int      @id @default(autoincrement())
+  memberId   String   @unique @map("member_id")
+  name       String
+  phone      String?
+  memberType MemberType @default(SPA) @map("member_type")
+  isActive   Boolean  @default(true) @map("is_active")
+  validUntil DateTime? @map("valid_until")
+  totalVisits Int     @default(0) @map("total_visits")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("spa_members")
+}
+
+enum MemberType {
+  SPA
+  VIP
+}
+
+// ---- Kitchen menu items ----
+model KitchenItem {
+  id        Int              @id @default(autoincrement())
+  name      String
+  status    KitchenItemStatus @default(AVAILABLE)
+  sortOrder Int              @default(0) @map("sort_order")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  @@map("kitchen_items")
+}
+
+enum KitchenItemStatus {
+  AVAILABLE
+  LOW
+  SOLD_OUT
+}
+
+// ---- Staff reminders ----
+model Reminder {
+  id          Int             @id @default(autoincrement())
+  title       String
+  time        String          // "09:00"
+  recurrence  ReminderRecurrence @default(TODAY)
+  status      ReminderStatus  @default(ACTIVE)
+  createdBy   Int             @map("created_by")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  completedAt DateTime?       @map("completed_at")
+
+  @@map("reminders")
+}
+
+enum ReminderRecurrence {
+  TODAY
+  EVERY_DAY
+  WEEKDAYS
+}
+
+enum ReminderStatus {
+  ACTIVE
+  COMPLETED
+  OVERDUE
+}
+
+// ---- Daily log entries ----
+model DailyLogEntry {
+  id        Int          @id @default(autoincrement())
+  category  LogCategory
+  content   String
+  staffId   Int          @map("staff_id")
+  staffName String       @map("staff_name")
+  isPinned  Boolean      @default(false) @map("is_pinned")
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  @@map("daily_log_entries")
+}
+
+enum LogCategory {
+  SHIFT_NOTE
+  INCIDENT
+  VIP
+  KITCHEN
+  HOUSEKEEPING
+}
+
+// ---- Staff instruction sections (editable by ADMIN only) ----
+model InstructionSection {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String   @db.Text
+  imageUrl  String?  @map("image_url")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("instruction_sections")
+}
+
+// ---- Guest announcement (shown on restaurant display screen) ----
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  text      String   @db.Text
+  isVisible Boolean  @default(true) @map("is_visible")
+  updatedBy String   @map("updated_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("announcements")
+}
+
+// ---- Audit log (tracks all actions for accountability) ----
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  staffId   Int      @map("staff_id")
+  action    String   // "CHECK_IN", "DUPLICATE_OVERRIDE", "LOGIN", etc.
+  details   Json?    // Flexible field for extra data
+  createdAt DateTime @default(now()) @map("created_at")
+
+  staff Staff @relation(fields: [staffId], references: [id])
+
+  @@map("audit_logs")
+}
