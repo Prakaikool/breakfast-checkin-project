@@ -15,7 +15,6 @@ const PUBLIC_PREFIXES = [
   "/api/auth/login",
   "/api/dashboard/public",
   "/api/display",
-  "/api/health",
 ];
 
 const SECURITY_HEADERS: Record<string, string> = {
