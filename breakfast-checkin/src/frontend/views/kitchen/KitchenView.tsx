@@ -5,31 +5,29 @@ import TopBar from "@/frontend/components/layout/TopBar";
 import { useAuth } from "@/frontend/hooks/useAuth";
 import type { KitchenItem } from "@/types";
 
-const STATUS_CYCLE: KitchenItem["status"][] = ["AVAILABLE", "LOW", "SOLD_OUT"];
+const STATUS_OPTIONS: { value: KitchenItem["status"]; label: string }[] = [
+  { value: "AVAILABLE", label: "Available" },
+  { value: "LOW",       label: "Running Low" },
+  { value: "SOLD_OUT",  label: "Sold Out" },
+];
 
 const STATUS_STYLES: Record<KitchenItem["status"], {
-  dot: string; text: string; label: string; card: string; badge: string;
+  dot: string; card: string; select: string;
 }> = {
   AVAILABLE: {
-    dot:   "bg-[#4a7a3d]",
-    text:  "text-[#4a7a3d]",
-    label: "Available",
-    card:  "border-[#e5e5e0] hover:border-[#b8d4b0] hover:bg-[#fafcf9]",
-    badge: "bg-[#e8efe5] text-[#4a7a3d]",
+    dot:    "bg-[#4a7a3d]",
+    card:   "border-[#e5e5e0]",
+    select: "bg-[#e8efe5] text-[#4a7a3d] border-[#c4dabb]",
   },
   LOW: {
-    dot:   "bg-[#d4893f]",
-    text:  "text-[#d4893f]",
-    label: "Running Low",
-    card:  "border-[#f5d9b8] hover:border-[#f0c89a] hover:bg-[#fffaf5]",
-    badge: "bg-[#fff3e8] text-[#a05c1e]",
+    dot:    "bg-[#d4893f]",
+    card:   "border-[#f5d9b8]",
+    select: "bg-[#fff3e8] text-[#a05c1e] border-[#f0c89a]",
   },
   SOLD_OUT: {
-    dot:   "bg-[#d45f5f]",
-    text:  "text-[#d45f5f]",
-    label: "Sold Out",
-    card:  "border-[#f5c0c0] hover:border-[#f0a0a0] hover:bg-[#fffafa]",
-    badge: "bg-[#fdeeee] text-[#c04040]",
+    dot:    "bg-[#d45f5f]",
+    card:   "border-[#f5c0c0]",
+    select: "bg-[#fdeeee] text-[#c04040] border-[#f0a8a8]",
   },
 };
 
@@ -48,23 +46,20 @@ export default function KitchenView() {
       .finally(() => setLoading(false));
   }, []);
 
-  const cycleStatus = async (item: KitchenItem) => {
-    const currentIdx = STATUS_CYCLE.indexOf(item.status);
-    const nextStatus = STATUS_CYCLE[(currentIdx + 1) % STATUS_CYCLE.length];
+  const changeStatus = async (item: KitchenItem, newStatus: KitchenItem["status"]) => {
+    if (newStatus === item.status) return;
 
-    // Optimistic update
-    setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, status: nextStatus } : i));
+    setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, status: newStatus } : i));
     setUpdatingId(item.id);
 
     try {
       const res = await fetch(`/api/kitchen/${item.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: nextStatus }),
+        body: JSON.stringify({ status: newStatus }),
       });
       if (!res.ok) throw new Error("Failed");
     } catch {
-      // Revert on failure
       setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, status: item.status } : i));
       setError("Failed to update status. Please try again.");
     } finally {
@@ -103,7 +98,6 @@ export default function KitchenView() {
             <span className="w-1.5 h-1.5 rounded-full bg-[#d45f5f]" />
             <span className="text-xs font-semibold text-[#c04040]">{soldOut} Sold Out</span>
           </div>
-          <span className="ml-auto text-xs text-[#9e9e9e]">Click any item to cycle status</span>
         </div>
 
         {error && (
@@ -129,20 +123,25 @@ export default function KitchenView() {
               const style = STATUS_STYLES[item.status];
               const isUpdating = updatingId === item.id;
               return (
-                <button
+                <div
                   key={item.id}
-                  onClick={() => cycleStatus(item)}
-                  disabled={isUpdating}
-                  className={`flex items-center justify-between bg-white border rounded-xl px-5 py-4 transition-all text-left disabled:opacity-60 ${style.card}`}
+                  className={`flex items-center justify-between bg-white border rounded-xl px-5 py-4 ${style.card}`}
                 >
                   <div className="flex items-center gap-3">
                     <span className={`w-2 h-2 rounded-full shrink-0 ${style.dot} ${isUpdating ? "animate-pulse" : ""}`} />
                     <span className="text-sm font-medium text-[#2d2d2d]">{item.name}</span>
                   </div>
-                  <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full shrink-0 ${style.badge}`}>
-                    {isUpdating ? "Updating…" : style.label}
-                  </span>
-                </button>
+                  <select
+                    value={item.status}
+                    disabled={isUpdating}
+                    onChange={(e) => changeStatus(item, e.target.value as KitchenItem["status"])}
+                    className={`text-xs font-semibold px-2.5 py-1 rounded-full border cursor-pointer appearance-none text-center disabled:opacity-60 transition-colors ${style.select}`}
+                  >
+                    {STATUS_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
               );
             })}
           </div>
