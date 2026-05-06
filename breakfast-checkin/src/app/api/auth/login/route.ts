@@ -104,6 +104,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error("Login error:", err);
-    return error("Login failed", 500);
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ success: false, error: "Login failed", detail: msg }, { status: 500 });
   }
 }
