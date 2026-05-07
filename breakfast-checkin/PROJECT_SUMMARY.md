@@ -1,6 +1,6 @@
 # Breakfast Check-In System — Project Summary
 
-> Last updated: May 5, 2026 (rev 2)
+> Last updated: May 7, 2026 (rev 3)
 
 ---
 
@@ -14,10 +14,10 @@ A **real-time hotel breakfast check-in web application** used by hotel staff to 
 
 | Layer | Technology | Version |
 |---|---|---|
-| Framework | Next.js (App Router) | 15.1.0 |
+| Framework | Next.js (App Router) | 15.5.14 |
 | Language | TypeScript | 5.7 |
 | Styling | Tailwind CSS | 4.0.0 |
-| Database | PostgreSQL | 14+ |
+| Database | PostgreSQL (Supabase) | 14+ |
 | ORM | Prisma | 6.19.3 |
 | Auth | JWT + bcrypt (HTTP-only cookies) | jsonwebtoken 9.0.2 |
 | Validation | Zod | 3.24.0 |
@@ -25,63 +25,66 @@ A **real-time hotel breakfast check-in web application** used by hotel staff to 
 | Icons | Lucide React | 0.469.0 |
 | PDF Export | jspdf | 4.2.1 |
 | Date Utilities | date-fns | 4.1.0 |
+| Deployment | Vercel (serverless) | — |
 
 ---
 
 ## Project Structure
 
 ```
-breakfast-checkin/
-├── prisma/
-│   ├── schema.prisma          # All 11 database tables
-│   └── seed.ts                # Sample data for development
-│
-├── src/
-│   ├── middleware.ts          # Edge middleware — route protection + security headers
-│   │
-│   ├── app/                   # Next.js App Router (pages + API routes)
-│   │   ├── api/               # 26 API endpoints
-│   │   │   ├── auth/          #   login / logout / me
-│   │   │   ├── guests/        #   search by room or name
-│   │   │   ├── checkins/      #   create, list, update check-ins
-│   │   │   ├── dashboard/     #   stats / timeline / activity / public
-│   │   │   ├── kitchen/       #   menu item status
-│   │   │   ├── spa/           #   member lookup and verification
-│   │   │   ├── daily-log/     #   shift notes, incidents, VIP entries
-│   │   │   ├── reminders/     #   staff reminders
-│   │   │   ├── instructions/  #   editable staff training content
-│   │   │   ├── reports/       #   daily summary and PDF export
-│   │   │   ├── display/       #   large-screen announcement + crowd
-│   │   │   ├── settings/      #   system config (times, max guests)
-│   │   │   └── upload/        #   image upload (ADMIN only)
-│   │   │
-│   │   ├── login/             # Staff login page
-│   │   ├── checkin/           # Main check-in interface
-│   │   ├── dashboard/         # Real-time manager dashboard
-│   │   ├── public-dash/       # Guest-facing status (no auth)
-│   │   ├── daily-log/         # Shift notes and incident log
-│   │   ├── kitchen/           # Kitchen menu item status board
-│   │   ├── reminders/         # Staff reminders
-│   │   ├── reports/           # Analytics and exports
-│   │   ├── members/           # Spa / VIP member verification
-│   │   ├── guests/            # Guest directory
-│   │   ├── settings/          # System configuration
-│   │   ├── instruction/       # Staff training materials
-│   │   └── display/           # Large-screen reception display
-│   │
-│   ├── backend/               # Shared server utilities
-│   │   ├── auth.ts            #   JWT helpers, revocation, requireAuth()
-│   │   ├── db.ts              #   Prisma client singleton
-│   │   ├── validations.ts     #   Zod schemas for all endpoints
-│   │   ├── api-helpers.ts     #   Consistent response helpers
-│   │   └── rate-limit.ts      #   Sliding-window rate limiter
-│   │
-│   ├── frontend/              # React components and views
-│   └── types/                 # Shared TypeScript definitions
-│
-├── next.config.ts             # Security headers + Next.js config
-├── .env.example               # Environment variable template
-└── PROJECT_SUMMARY.md         # This file
+breakfast-checkin-project/          ← git repo root
+└── breakfast-checkin/              ← Next.js app (Vercel rootDirectory)
+    ├── prisma/
+    │   ├── schema.prisma           # All 11 database tables
+    │   └── seed.ts                 # Sample data for development
+    │
+    ├── src/
+    │   ├── middleware.ts           # Edge middleware — route protection + security headers
+    │   │
+    │   ├── app/                    # Next.js App Router (pages + API routes)
+    │   │   ├── api/                # 27 API endpoints
+    │   │   │   ├── auth/           #   login / logout / me
+    │   │   │   ├── guests/         #   search by room or name; PATCH [id] for notes
+    │   │   │   ├── checkins/       #   create, list, update check-ins
+    │   │   │   ├── dashboard/      #   stats / timeline / activity / public
+    │   │   │   ├── kitchen/        #   menu item status (dropdown UI)
+    │   │   │   ├── spa/            #   member lookup and verification
+    │   │   │   ├── daily-log/      #   shift notes, incidents, VIP entries
+    │   │   │   ├── reminders/      #   staff reminders
+    │   │   │   ├── instructions/   #   editable staff training content
+    │   │   │   ├── reports/        #   daily summary and PDF export
+    │   │   │   ├── display/        #   large-screen announcement + crowd
+    │   │   │   ├── settings/       #   system config (times, max guests)
+    │   │   │   └── upload/         #   image upload (ADMIN only)
+    │   │   │
+    │   │   ├── login/              # Staff login page
+    │   │   ├── checkin/            # Main check-in interface
+    │   │   ├── dashboard/          # Real-time manager dashboard
+    │   │   ├── public-dash/        # Guest-facing status (no auth)
+    │   │   ├── daily-log/          # Shift notes and incident log
+    │   │   ├── kitchen/            # Kitchen menu item status board
+    │   │   ├── reminders/          # Staff reminders
+    │   │   ├── reports/            # Analytics and exports
+    │   │   ├── members/            # Spa / VIP member verification
+    │   │   ├── guests/             # Guest directory
+    │   │   ├── settings/           # System configuration
+    │   │   ├── instruction/        # Staff training materials
+    │   │   └── display/            # Large-screen reception display
+    │   │
+    │   ├── backend/                # Shared server utilities
+    │   │   ├── auth.ts             #   JWT helpers, revocation, requireAuth()
+    │   │   ├── db.ts               #   Prisma client singleton
+    │   │   ├── validations.ts      #   Zod schemas for all endpoints
+    │   │   ├── api-helpers.ts      #   Consistent response helpers
+    │   │   └── rate-limit.ts       #   Sliding-window rate limiter
+    │   │
+    │   ├── frontend/               # React components and views
+    │   └── types/                  # Shared TypeScript definitions
+    │
+    ├── next.config.ts              # Prisma serverless config + security headers
+    ├── vercel.json                 # Vercel framework preset
+    ├── .env.example                # Environment variable template
+    └── PROJECT_SUMMARY.md          # This file
 ```
 
 ---
@@ -104,6 +107,27 @@ breakfast-checkin/
 | `/settings` | ADMIN | System config (breakfast times, max guests) |
 | `/instruction` | Authenticated (edit: ADMIN) | Staff training materials |
 | `/display` | Everyone (no auth) | Large-screen display for reception / dining area |
+
+---
+
+## Deployment
+
+Live at **https://breakfast-checkin-project.vercel.app**
+
+| Setting | Value |
+|---|---|
+| Platform | Vercel (serverless, Node.js runtime) |
+| Region | US East (iad1) |
+| Root directory | `breakfast-checkin/` (monorepo subfolder) |
+| Database host | Supabase (eu-north-1, pgbouncer pooler on port 6543) |
+| Prisma binary | `rhel-openssl-3.0.x` (required for Vercel Lambda runtime) |
+
+**Key Vercel requirements:**
+- `postinstall: prisma generate` in `package.json` — generates the Prisma client after `npm install`
+- `binaryTargets = ["native", "rhel-openssl-3.0.x"]` in `schema.prisma` — ensures the RHEL binary is built
+- `PrismaPlugin` from `@prisma/nextjs-monorepo-workaround-plugin` in `next.config.ts` — explicitly copies the `.so.node` engine binary into serverless bundles (nft tracer misses it)
+- `DATABASE_URL` must include `?pgbouncer=true&connection_limit=1` — required for Supabase pgbouncer + Vercel serverless
+- `JWT_EXPIRY` should be left unset in Vercel — setting it to an empty string bypasses the `|| "8h"` fallback and breaks JWT signing
 
 ---
 
@@ -143,6 +167,7 @@ Registered hotel guests imported from PMS or entered manually.
 | checkInDate / checkOutDate | DateTime | |
 | hasBreakfast | Boolean | Whether breakfast is included |
 | pmsId | String? | ID from hotel PMS for sync |
+| notes | String? | Persistent staff note about this guest; auto-cleared when checkout date passes |
 
 ### BreakfastSession
 One record per day representing the active breakfast service window.
@@ -232,12 +257,12 @@ Immutable record of all significant staff actions.
 
 ---
 
-## API Endpoints (26)
+## API Endpoints (27)
 
 ### Authentication
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/api/auth/login` | No | Login with email + PIN, returns JWT cookie |
+| POST | `/api/auth/login` | No | Login with email + password, returns JWT cookie |
 | POST | `/api/auth/logout` | Yes | Revokes JWT and clears cookie |
 | GET | `/api/auth/me` | Yes | Returns current staff profile |
 
@@ -246,8 +271,9 @@ Immutable record of all significant staff actions.
 |---|---|---|---|
 | GET | `/api/guests?room=816` | Yes | Search by room number |
 | GET | `/api/guests?name=smith` | Yes | Search by guest name |
-| GET | `/api/guests?all=true` | Yes | List all active guests |
+| GET | `/api/guests?all=true` | Yes | List all active guests (max 500 rows) |
 | GET | `/api/guests/[id]` | Yes | Get single guest |
+| PATCH | `/api/guests/[id]` | Yes | Update persistent guest note (`notes` field) |
 
 ### Check-ins
 | Method | Endpoint | Auth | Description |
@@ -268,7 +294,8 @@ Immutable record of all significant staff actions.
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
 | GET | `/api/kitchen` | Yes | List all menu items with status |
-| PATCH | `/api/kitchen/[id]` | KITCHEN / SUPERVISOR / ADMIN | Update item status |
+| GET | `/api/kitchen/public` | **No** | Public read of kitchen items (for display screen) |
+| PATCH | `/api/kitchen/[id]` | KITCHEN / SUPERVISOR / ADMIN | Update item status via dropdown (AVAILABLE / LOW / SOLD_OUT) |
 
 ### Spa / Members
 | Method | Endpoint | Auth | Description |
@@ -327,6 +354,7 @@ Immutable record of all significant staff actions.
 |---|---|---|---|---|
 | Login | ✅ | ✅ | ✅ | ✅ |
 | Check-in guests | ✅ | ✅ | ✅ | ✅ |
+| Save / clear guest note | ✅ | ✅ | ✅ | ✅ |
 | View dashboard | ✅ | ✅ | ✅ | ✅ |
 | View daily log | ✅ | ✅ | ✅ | ✅ |
 | Create daily log entry | ✅ | ✅ | ✅ | ✅ |
@@ -334,6 +362,7 @@ Immutable record of all significant staff actions.
 | Delete any daily log entry | ❌ | ❌ | ✅ | ✅ |
 | Pin daily log entries | ❌ | ❌ | ✅ | ✅ |
 | Update kitchen item status | ❌ | ✅ | ✅ | ✅ |
+| See reminder overlay pop-ups | ❌ | ❌ | ✅ | ✅ |
 | Create / complete own reminders | ✅ | ✅ | ✅ | ✅ |
 | Modify / delete any reminder | ❌ | ❌ | ❌ | ✅ |
 | View staff training materials | ✅ | ✅ | ✅ | ✅ |
@@ -448,9 +477,21 @@ Every significant action is recorded in the `AuditLog` table with: staff ID, act
 - Adults and children are **capped independently** at their respective registered remaining values — staff can reduce either counter but cannot enter numbers that exceed the registered guest list for that type
 - In override mode (room fully checked in), both counters become free-entry with a max of 20
 
+**Guest notes**
+- Staff can write a persistent note on any guest from the check-in panel (`Guest.notes` field)
+- Notes survive across sessions — they are tied to the guest record, not a specific check-in
+- Notes are automatically cleared (set to `null`) by a lazy cleanup query in `GET /api/guests` when the guest's `checkOutDate` has passed
+- There is one note per guest; it replaces the per-check-in note textarea which was removed
+
+**Reminder overlay**
+- When an ACTIVE reminder's time falls within the current hour, a dismissible overlay appears on all authenticated pages
+- Visibility is restricted to **ADMIN and SUPERVISOR** only — ENTRANCE and KITCHEN staff do not see it
+- Each reminder can be dismissed at most **twice** per browser session (tracked in a `Map` in component state); after two dismissals it is permanently suppressed for that session
+- Marking a reminder "Done" immediately removes it from the overlay and calls `PATCH /api/reminders/[id]`
+
 **Real-time dashboard**
-- The frontend polls `/api/dashboard/stats`, `/api/dashboard/timeline`, and `/api/dashboard/activity` every 15 seconds
-- No WebSocket complexity — polling interval is configurable
+- The frontend polls `/api/dashboard/stats`, `/api/dashboard/timeline`, and `/api/dashboard/activity` every 15 seconds (configurable via `NEXT_PUBLIC_POLL_INTERVAL`)
+- No WebSocket complexity
 
 **Validation**
 - All API inputs are validated with **Zod schemas** before any database access
@@ -472,11 +513,12 @@ Every significant action is recorded in the `AuditLog` table with: staff ID, act
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | Yes | PostgreSQL connection string (pooled) |
-| `DIRECT_URL` | Yes | PostgreSQL direct connection string (for migrations) |
+| `DATABASE_URL` | Yes | Supabase pgbouncer URL — must include `?pgbouncer=true&connection_limit=1` |
+| `DIRECT_URL` | Yes | Supabase direct URL on port 5432 (used by Prisma for migrations) |
 | `JWT_SECRET` | Yes | Secret key for signing JWTs — must be set or server refuses to start |
-| `JWT_EXPIRY` | No | Token lifetime (default: `8h`) |
+| `JWT_EXPIRY` | No | Token lifetime (default: `8h`) — **do not set to empty string in Vercel** |
 | `NEXT_PUBLIC_APP_URL` | No | Public base URL of the app |
+| `NEXT_PUBLIC_POLL_INTERVAL` | No | Dashboard polling interval in ms (default: `15000`) |
 | `BREAKFAST_START_TIME` | No | Default session start (e.g., `07:00`) |
 | `BREAKFAST_END_TIME` | No | Default session end (e.g., `10:30`) |
 | `MAX_GUESTS_PER_ROOM` | No | Default guest cap per room |
@@ -513,6 +555,7 @@ Every significant action is recorded in the `AuditLog` table with: staff ID, act
 - Push notifications for kitchen alerts
 - Multi-property support (one instance per hotel property)
 - Refresh token rotation (current tokens are single long-lived tokens)
-- Redis-backed token revocation (current revocation is in-memory, resets on restart)
+- Redis-backed token revocation (current revocation is in-memory, resets on server restart — tokens expire in 8 h anyway)
 - Structured server-side logging (currently uses `console.error`)
+- Guest note history / audit trail (currently only the latest note is stored)
 
