@@ -42,7 +42,6 @@ export default function MemberDetailView({ id }: { id: string }) {
         staff={staff}
       />
 
-      {/* Page tab */}
       <div className="bg-white border-b border-[#e5e5e0] px-7">
         <div className="py-2">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">
@@ -69,7 +68,6 @@ export default function MemberDetailView({ id }: { id: string }) {
           </div>
         ) : (
           <>
-            {/* Header card */}
             <div className="bg-white border border-[#e5e5e0] rounded-xl p-5 mb-5 flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-xl font-semibold text-purple-700 shrink-0">
                 {member.name.charAt(0)}
@@ -88,7 +86,6 @@ export default function MemberDetailView({ id }: { id: string }) {
               </div>
             </div>
 
-            {/* Details card */}
             <div className="bg-white border border-[#e5e5e0] rounded-xl p-5">
               <h3 className="text-sm font-semibold text-[#2d2d2d] mb-4">Member Information</h3>
 

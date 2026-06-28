@@ -9,9 +9,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const { staff, loading, logout, isLoggedIn } = useAuth();
   const router = useRouter();
 
-  // Desktop: sidebar collapsed
   const [collapsed, setCollapsed] = useState(false);
-  // Mobile: overlay drawer open/closed
   const [mobileOpen, setMobileOpen] = useState(false);
 
   if (loading) {
@@ -43,7 +41,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         onMobileClose={() => setMobileOpen(false)}
       />
 
-      {/* Main content — shifts right based on sidebar state */}
       <main
         className={
           collapsed
@@ -51,7 +48,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             : "lg:ml-50 transition-all duration-300"
         }
       >
-        {/* Mobile header bar with hamburger */}
         <div className="lg:hidden fixed top-0 left-0 right-0 z-10 h-15 bg-white border-b border-[#e5e5e0] flex items-center px-4 gap-3 shadow-sm">
           <button
             onClick={() => setMobileOpen(true)}
@@ -67,7 +63,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <span className="text-sm font-semibold text-[#2d2d2d]">Breakfast Check-In</span>
         </div>
 
-        {/* Offset for mobile header */}
         <div className="lg:hidden h-15" />
 
         {children}

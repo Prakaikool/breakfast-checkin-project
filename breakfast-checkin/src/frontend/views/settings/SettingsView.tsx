@@ -92,7 +92,6 @@ export default function SettingsView() {
 
       <div className="p-7 max-w-175">
 
-        {/* Saved flash */}
         {saved && (
           <div className="bg-[#e8efe5] border border-[#b8d4b0] text-[#4a7a3d] text-sm px-4 py-2.5 rounded-lg mb-5 flex items-center gap-2">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -100,7 +99,6 @@ export default function SettingsView() {
           </div>
         )}
 
-        {/* Check-in Rules */}
         <div className="bg-white border border-[#e5e5e0] rounded-xl p-5 mb-5">
           <h3 className="text-sm font-semibold text-[#2d2d2d] mb-4">Check-in rules</h3>
 
@@ -133,7 +131,6 @@ export default function SettingsView() {
           </div>
         </div>
 
-        {/* Breakfast Rules */}
         <div className="bg-white border border-[#e5e5e0] rounded-xl p-5 mb-5">
           <h3 className="text-sm font-semibold text-[#2d2d2d] mb-2">Breakfast rules</h3>
           <div className="divide-y divide-[#f0f0eb]">
@@ -143,7 +140,6 @@ export default function SettingsView() {
           </div>
         </div>
 
-        {/* User settings */}
         <div className="bg-white border border-[#e5e5e0] rounded-xl p-5">
           <h3 className="text-sm font-semibold text-[#2d2d2d] mb-4">User settings</h3>
           <div className="flex items-center gap-4 mb-5">
@@ -168,7 +164,6 @@ export default function SettingsView() {
           </div>
         </div>
 
-        {/* App info */}
         <div className="mt-5 text-center text-xs text-[#c0c0c0]">
           Breakfast Check-In · v0.1.0
         </div>

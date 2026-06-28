@@ -47,7 +47,6 @@ export default function ReminderOverlay() {
                 );
                 setDue(hit ?? null);
             } catch {
-                // not logged in — silent
             }
         }
 
@@ -78,18 +77,15 @@ export default function ReminderOverlay() {
 
     return (
         <div className="fixed inset-0 z-9999 flex items-center justify-center px-6">
-            {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/50"
                 onClick={dismiss}
             />
 
-            {/* Card */}
             <div
                 className="relative z-10 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
                 style={{ animation: 'reminderPop 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}
             >
-                {/* Header */}
                 <div className="bg-[#d97706] px-6 py-5 flex items-center gap-3">
                     <BellRing size={22} className="text-white shrink-0 animate-bounce" />
                     <p className="text-white text-sm font-bold uppercase tracking-widest flex-1">
@@ -103,7 +99,6 @@ export default function ReminderOverlay() {
                     </button>
                 </div>
 
-                {/* Body */}
                 <div className="bg-white px-6 py-7 flex flex-col gap-5">
                     <div>
                         <p className="text-[22px] font-bold text-[#2d2d2d] leading-snug">

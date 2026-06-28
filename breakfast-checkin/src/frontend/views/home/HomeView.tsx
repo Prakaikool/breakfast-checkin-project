@@ -127,7 +127,6 @@ export default function HomeView() {
         staff={staff}
       />
 
-      {/* Page tab */}
       <div className="bg-white border-b border-[#e5e5e0] px-4 md:px-7">
         <div className="py-2 flex items-center">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">
@@ -137,7 +136,6 @@ export default function HomeView() {
       </div>
 
       <div className="p-4 md:p-7">
-        {/* Greeting */}
         <h2 className="text-lg font-semibold text-[#2d2d2d]">
           {greeting}, {firstName}!
         </h2>
@@ -145,7 +143,6 @@ export default function HomeView() {
           Here&apos;s your breakfast overview for today.
         </p>
 
-        {/* Stats cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
           {statCards.map((card, i) => (
             <div
@@ -163,7 +160,6 @@ export default function HomeView() {
           ))}
         </div>
 
-        {/* Quick Actions */}
         <h3 className="text-sm font-semibold text-[#2d2d2d] mb-3">
           Quick Actions
         </h3>
@@ -186,9 +182,7 @@ export default function HomeView() {
           ))}
         </div>
 
-        {/* Bottom panels */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Recent Activity */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl p-4">
             <h3 className="text-sm font-semibold text-[#2d2d2d] mb-3">
               Recent Activity
@@ -220,7 +214,6 @@ export default function HomeView() {
             )}
           </div>
 
-          {/* Housekeeping Ready */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl p-4">
             <h3 className="text-sm font-semibold text-[#2d2d2d] mb-3">
               Housekeeping Ready

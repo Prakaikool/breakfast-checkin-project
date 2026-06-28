@@ -31,15 +31,15 @@ interface ReportData {
 }
 
 const LEVEL_PILL: Record<Level, string> = {
-  LOW:      "bg-[#e8efe5] text-[#4a7a3d]",
+  LOW: "bg-[#e8efe5] text-[#4a7a3d]",
   MODERATE: "bg-[#fff3e8] text-[#a05c1e]",
-  BUSY:     "bg-[#fdeeee] text-[#c04040]",
+  BUSY: "bg-[#fdeeee] text-[#c04040]",
 };
 
 const LEVEL_DOT: Record<Level, string> = {
-  LOW:      "bg-[#6b8a5e]",
+  LOW: "bg-[#6b8a5e]",
   MODERATE: "bg-[#d4893f]",
-  BUSY:     "bg-[#d45f5f]",
+  BUSY: "bg-[#d45f5f]",
 };
 
 function BarChart({
@@ -57,7 +57,6 @@ function BarChart({
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Bar area - fixed height so percentage heights resolve correctly */}
       <div className="flex items-end gap-2 h-16">
         {values.map((val, i) => {
           const isPeak = val === maxVal && val > 0;
@@ -71,7 +70,6 @@ function BarChart({
           );
         })}
       </div>
-      {/* Label row */}
       <div className="flex gap-2">
         {bars.map((bar, i) => {
           const label = labelKey === "time" ? (bar.time ?? bar.label) : bar.label;
@@ -106,8 +104,8 @@ async function exportPDF(data: ReportData, period: string) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
 
   const green = [107, 138, 94] as const;
-  const dark  = [45, 45, 45]  as const;
-  const grey  = [107, 107, 107] as const;
+  const dark = [45, 45, 45] as const;
+  const grey = [107, 107, 107] as const;
   const light = [245, 245, 240] as const;
 
   const pageW = 210;
@@ -115,7 +113,6 @@ async function exportPDF(data: ReportData, period: string) {
   const contentW = pageW - margin * 2;
   const dateStr = new Date().toISOString().slice(0, 10);
 
-  // ── Header banner ──────────────────────────────────────────
   doc.setFillColor(...green);
   doc.rect(0, 0, pageW, 28, "F");
   doc.setTextColor(255, 255, 255);
@@ -129,13 +126,12 @@ async function exportPDF(data: ReportData, period: string) {
     margin, 20
   );
 
-  // ── Summary cards ──────────────────────────────────────────
   const s = data.summary;
   const cards = [
-    { label: "Total Guests",  value: String(s.totalGuests), sub: s.totalChange != null ? `${s.totalChange >= 0 ? "+" : ""}${s.totalChange}% vs prev` : undefined },
-    { label: "Avg / Day",     value: String(s.avgPerDay),   sub: s.avgChange != null ? `${s.avgChange >= 0 ? "+" : ""}${s.avgChange}% vs prev` : undefined },
-    { label: "Peak Day",      value: s.peakDay },
-    { label: "Busiest Hour",  value: s.busiestHour },
+    { label: "Total Guests", value: String(s.totalGuests), sub: s.totalChange != null ? `${s.totalChange >= 0 ? "+" : ""}${s.totalChange}% vs prev` : undefined },
+    { label: "Avg / Day", value: String(s.avgPerDay), sub: s.avgChange != null ? `${s.avgChange >= 0 ? "+" : ""}${s.avgChange}% vs prev` : undefined },
+    { label: "Peak Day", value: s.peakDay },
+    { label: "Busiest Hour", value: s.busiestHour },
   ];
 
   const cardW = (contentW - 9) / 4;
@@ -168,7 +164,6 @@ async function exportPDF(data: ReportData, period: string) {
 
   y += 28;
 
-  // ── Bar chart: Guests Per Day ───────────────────────────────
   const chartW = (contentW - 5) / 2;
   const chartH = 38;
 
@@ -226,38 +221,35 @@ async function exportPDF(data: ReportData, period: string) {
 
   y += chartH + 22;
 
-  // ── Daily Summary table ─────────────────────────────────────
   doc.setFillColor(255, 255, 255);
   doc.roundedRect(margin, y, contentW, 8, 2, 2, "F");
   doc.setDrawColor(229, 229, 224);
   doc.setLineWidth(0.3);
 
-  // Table header
   doc.setFillColor(...light);
   doc.rect(margin, y, contentW, 8, "F");
   doc.setTextColor(...grey);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(7.5);
   const cols = [
-    { label: "Date",     x: margin + 3,           w: 55 },
-    { label: "Adults",   x: margin + 58,           w: 25 },
-    { label: "Children", x: margin + 83,           w: 28 },
-    { label: "Total",    x: margin + 111,          w: 25 },
-    { label: "Status",   x: margin + 136,          w: 40 },
+    { label: "Date", x: margin + 3, w: 55 },
+    { label: "Adults", x: margin + 58, w: 25 },
+    { label: "Children", x: margin + 83, w: 28 },
+    { label: "Total", x: margin + 111, w: 25 },
+    { label: "Status", x: margin + 136, w: 40 },
   ];
   cols.forEach((c) => doc.text(c.label, c.x, y + 5.5));
   y += 8;
 
-  // Table rows
   const LEVEL_COLOR: Record<Level, [number, number, number]> = {
-    LOW:      [74, 122, 61],
+    LOW: [74, 122, 61],
     MODERATE: [160, 92, 30],
-    BUSY:     [192, 64, 64],
+    BUSY: [192, 64, 64],
   };
   const LEVEL_BG: Record<Level, [number, number, number]> = {
-    LOW:      [232, 239, 229],
+    LOW: [232, 239, 229],
     MODERATE: [255, 243, 232],
-    BUSY:     [253, 238, 238],
+    BUSY: [253, 238, 238],
   };
 
   data.days.forEach((day, i) => {
@@ -281,7 +273,6 @@ async function exportPDF(data: ReportData, period: string) {
     doc.setTextColor(...dark);
     doc.text(String(day.total), cols[3].x, y + 5.5);
 
-    // Status pill
     const pill = day.level.charAt(0) + day.level.slice(1).toLowerCase();
     const pillX = cols[4].x;
     const pillW = 22;
@@ -292,17 +283,14 @@ async function exportPDF(data: ReportData, period: string) {
     doc.setFontSize(6.5);
     doc.text(pill, pillX + pillW / 2, y + 5.4, { align: "center" });
 
-    // Row separator
     doc.setDrawColor(240, 240, 235);
     doc.line(margin, y + rowH, margin + contentW, y + rowH);
     y += rowH;
   });
 
-  // Border around table
   doc.setDrawColor(229, 229, 224);
   doc.roundedRect(margin, y - data.days.length * 8 - 8, contentW, data.days.length * 8 + 8, 2, 2, "S");
 
-  // ── Footer ──────────────────────────────────────────────────
   doc.setFontSize(7);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...grey);
@@ -343,7 +331,6 @@ export default function ReportsView() {
         staff={staff}
       />
 
-      {/* Page tab */}
       <div className="bg-white border-b border-[#e5e5e0] px-4 md:px-7">
         <div className="py-2">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">
@@ -353,7 +340,6 @@ export default function ReportsView() {
       </div>
 
       <div className="p-4 md:p-7">
-        {/* Toolbar */}
         <div className="flex items-center justify-between mb-5">
           <div className="relative">
             <button
@@ -398,9 +384,7 @@ export default function ReportsView() {
           </div>
         </div>
 
-        {/* Summary stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-          {/* Total Guests */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl px-5 py-4">
             <p className="text-xs text-[#6b6b6b] mb-1">Total Guests</p>
             <p className="text-[22px] font-bold text-[#2d2d2d] leading-none mb-1">
@@ -413,7 +397,6 @@ export default function ReportsView() {
             )}
           </div>
 
-          {/* Avg / Day */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl px-5 py-4">
             <p className="text-xs text-[#6b6b6b] mb-1">Avg / Day</p>
             <p className="text-[22px] font-bold text-[#2d2d2d] leading-none mb-1">
@@ -426,7 +409,6 @@ export default function ReportsView() {
             )}
           </div>
 
-          {/* Peak Day */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl px-5 py-4">
             <p className="text-xs text-[#6b6b6b] mb-1">Peak Day</p>
             <p className="text-[22px] font-bold text-[#2d2d2d] leading-none">
@@ -434,7 +416,6 @@ export default function ReportsView() {
             </p>
           </div>
 
-          {/* Busiest Hour */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl px-5 py-4">
             <p className="text-xs text-[#6b6b6b] mb-1">Busiest Hour</p>
             <p className="text-[22px] font-bold text-[#2d2d2d] leading-none">
@@ -443,9 +424,7 @@ export default function ReportsView() {
           </div>
         </div>
 
-        {/* Charts row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-          {/* Guests Per Day */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl p-5">
             <p className="text-sm font-semibold text-[#2d2d2d] mb-4">Guests Per Day</p>
             {data ? (
@@ -461,7 +440,6 @@ export default function ReportsView() {
             )}
           </div>
 
-          {/* Peak Hours */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl p-5">
             <p className="text-sm font-semibold text-[#2d2d2d] mb-4">Peak Hours</p>
             {data ? (
@@ -478,21 +456,18 @@ export default function ReportsView() {
           </div>
         </div>
 
-        {/* Daily Summary table */}
         <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
           <div className="px-5 py-4 border-b border-[#e5e5e0]">
             <p className="text-sm font-semibold text-[#2d2d2d]">Daily Summary</p>
           </div>
 
           <div className="overflow-x-auto">
-            {/* Table header */}
             <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1.5fr] px-5 py-2 border-b border-[#e5e5e0] min-w-100">
               {["Date", "Adults", "Children", "Total", "Status"].map((h) => (
                 <span key={h} className="text-xs font-semibold text-[#9e9e9e]">{h}</span>
               ))}
             </div>
 
-            {/* Rows */}
             {!data ? (
               <div className="px-5 py-6 text-sm text-[#9e9e9e]">Loading...</div>
             ) : data.days.length === 0 ? (

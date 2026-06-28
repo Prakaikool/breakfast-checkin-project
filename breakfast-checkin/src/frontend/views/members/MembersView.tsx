@@ -78,13 +78,11 @@ function AddMemberModal({
   }
 
   return (
-    /* Overlay */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="bg-white rounded-2xl shadow-xl w-105 overflow-hidden">
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e5e0]">
           <h2 className="text-sm font-semibold text-[#2d2d2d]">Add New Member</h2>
           <button onClick={onClose} className="text-[#9e9e9e] hover:text-[#2d2d2d] transition-colors">
@@ -92,9 +90,7 @@ function AddMemberModal({
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-          {/* Member type toggle */}
           <div>
             <label className="block text-xs font-medium text-[#6b6b6b] mb-1.5">Member Type</label>
             <div className="flex gap-2">
@@ -117,7 +113,6 @@ function AddMemberModal({
             </div>
           </div>
 
-          {/* Name */}
           <div>
             <label className="block text-xs font-medium text-[#6b6b6b] mb-1.5">
               Full Name <span className="text-[#c04040]">*</span>
@@ -132,7 +127,6 @@ function AddMemberModal({
             />
           </div>
 
-          {/* Phone */}
           <div>
             <label className="block text-xs font-medium text-[#6b6b6b] mb-1.5">Phone (optional)</label>
             <input
@@ -144,7 +138,6 @@ function AddMemberModal({
             />
           </div>
 
-          {/* Valid until */}
           <div>
             <label className="block text-xs font-medium text-[#6b6b6b] mb-1.5">Membership Valid Until (optional)</label>
             <input
@@ -156,19 +149,16 @@ function AddMemberModal({
             <p className="text-[11px] text-[#9e9e9e] mt-1">Leave blank for no expiry</p>
           </div>
 
-          {/* Error */}
           {fieldError && (
             <p className="text-xs text-[#c04040] bg-[#fdeeee] border border-[#f5c0c0] rounded-lg px-3 py-2">
               {fieldError}
             </p>
           )}
 
-          {/* Auto-generated ID note */}
           <p className="text-[11px] text-[#9e9e9e]">
             Member ID will be generated automatically (e.g. SPA-20250421-A3F9)
           </p>
 
-          {/* Actions */}
           <div className="flex items-center gap-3 pt-1">
             <button
               type="button"
@@ -244,7 +234,6 @@ export default function MembersView() {
       </div>
 
       <div className="p-7">
-        {/* Success banner */}
         {addedBanner && (
           <div className="flex items-center gap-2 bg-[#e8efe5] border border-[#b8d4b0] text-[#4a7a3d] text-sm px-4 py-2.5 rounded-lg mb-4">
             <span className="text-base">✓</span>
@@ -252,7 +241,6 @@ export default function MembersView() {
           </div>
         )}
 
-        {/* Summary + Add button */}
         <div className="flex items-center gap-3 mb-5">
           <div className="flex items-center gap-1.5 bg-[#fff3e8] px-3 py-1.5 rounded-full">
             <Star size={11} className="text-[#a05c1e]" />
@@ -277,7 +265,6 @@ export default function MembersView() {
           </button>
         </div>
 
-        {/* Toolbar */}
         <div className="flex items-center gap-3 mb-5">
           <input
             type="text"
@@ -287,7 +274,6 @@ export default function MembersView() {
             className="flex-1 max-w-sm px-4 py-2.5 bg-white border border-[#e5e5e0] rounded-lg text-sm text-[#2d2d2d] placeholder:text-[#c0c0c0] focus:outline-none focus:ring-2 focus:ring-[#6b8a5e]/30 focus:border-[#6b8a5e]"
           />
 
-          {/* Type filter */}
           <div className="flex items-center gap-1 bg-[#f0f0eb] rounded-lg p-1">
             {(["all", "VIP", "SPA"] as FilterType[]).map((t) => (
               <button
@@ -300,7 +286,6 @@ export default function MembersView() {
             ))}
           </div>
 
-          {/* Status filter */}
           <div className="flex items-center gap-1 bg-[#f0f0eb] rounded-lg p-1">
             {(["all", "active", "expired"] as FilterStatus[]).map((s) => (
               <button
@@ -314,9 +299,7 @@ export default function MembersView() {
           </div>
         </div>
 
-        {/* Table */}
         <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
-          {/* Header */}
           <div className="grid grid-cols-[1fr_110px_80px_90px_60px_40px] gap-4 px-5 py-3 border-b border-[#e5e5e0] bg-[#f9f9f7]">
             {["Name", "Member ID", "Type", "Status", "Visits", ""].map((h) => (
               <span key={h} className="text-xs font-semibold text-[#9e9e9e] uppercase tracking-wide">{h}</span>
@@ -340,7 +323,6 @@ export default function MembersView() {
                 key={member.id}
                 className="grid grid-cols-[1fr_110px_80px_90px_60px_40px] gap-4 px-5 py-3.5 border-b border-[#f0f0eb] last:border-0 items-center hover:bg-[#fafaf8] transition-colors"
               >
-                {/* Name */}
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
                     member.memberType === "VIP" ? "bg-[#fff3e8] text-[#a05c1e]" : "bg-[#f3eef8] text-[#6a3e8a]"
@@ -350,10 +332,8 @@ export default function MembersView() {
                   <span className="text-sm font-medium text-[#2d2d2d] truncate">{member.name}</span>
                 </div>
 
-                {/* Member ID */}
                 <span className="text-xs text-[#9e9e9e] font-mono">{member.memberId}</span>
 
-                {/* Type */}
                 <span className={`text-xs font-semibold px-2 py-0.5 rounded-full w-fit ${
                   member.memberType === "VIP"
                     ? "bg-[#fff3e8] text-[#a05c1e]"
@@ -362,7 +342,6 @@ export default function MembersView() {
                   {member.memberType}
                 </span>
 
-                {/* Status */}
                 <span className={`flex items-center gap-1.5 text-xs font-medium ${
                   member.isActive ? "text-[#4a7a3d]" : "text-[#c04040]"
                 }`}>
@@ -370,10 +349,8 @@ export default function MembersView() {
                   {member.isActive ? "Active" : "Expired"}
                 </span>
 
-                {/* Visits */}
                 <span className="text-sm font-semibold text-[#2d2d2d]">{member.totalVisits}</span>
 
-                {/* Arrow */}
                 <Link href={`/members/${member.id}`} className="text-[#9e9e9e] hover:text-[#6b8a5e] transition-colors"><ChevronRight size={16} /></Link>
               </div>
             ))
@@ -385,7 +362,6 @@ export default function MembersView() {
         )}
       </div>
 
-      {/* Add member modal */}
       {showAdd && (
         <AddMemberModal
           onClose={() => setShowAdd(false)}

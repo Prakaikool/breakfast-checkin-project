@@ -37,7 +37,6 @@ function GdprBanner() {
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 max-w-md mx-auto px-4 pb-4">
             <div className="bg-[#2d2d2d] rounded-2xl overflow-hidden shadow-2xl">
-                {/* Main banner */}
                 <div className="px-4 py-4 flex items-start gap-3">
                     <Shield size={16} className="text-[#a8c5a0] shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
@@ -63,7 +62,6 @@ function GdprBanner() {
                     </button>
                 </div>
 
-                {/* Detail panel */}
                 {showDetail && (
                     <div className="border-t border-[#3d3d3d] px-4 py-4 flex flex-col gap-2.5">
                         <DetailRow
@@ -89,7 +87,6 @@ function GdprBanner() {
                     </div>
                 )}
 
-                {/* Accept button */}
                 <div className="px-4 pb-4">
                     <button
                         onClick={accept}
@@ -175,9 +172,9 @@ const LEVEL_CONFIG: Record<
 };
 
 const ITEM_CONFIG: Record<ItemStatus, { label: string; icon: React.ElementType; color: string; bg: string; border: string }> = {
-    AVAILABLE:  { label: 'Available',  icon: CheckCircle2, color: 'text-[#3a6b30]', bg: 'bg-[#eef5eb]', border: 'border-[#b8d9b0]' },
-    LOW:        { label: 'Running Low', icon: AlertCircle,  color: 'text-[#8a4a10]', bg: 'bg-[#fef5ec]', border: 'border-[#f2c880]' },
-    SOLD_OUT:   { label: 'Sold Out',    icon: XCircle,      color: 'text-[#9e9e9e]', bg: 'bg-[#f5f5f0]', border: 'border-[#e0e0da]' },
+    AVAILABLE: { label: 'Available', icon: CheckCircle2, color: 'text-[#3a6b30]', bg: 'bg-[#eef5eb]', border: 'border-[#b8d9b0]' },
+    LOW: { label: 'Running Low', icon: AlertCircle, color: 'text-[#8a4a10]', bg: 'bg-[#fef5ec]', border: 'border-[#f2c880]' },
+    SOLD_OUT: { label: 'Sold Out', icon: XCircle, color: 'text-[#9e9e9e]', bg: 'bg-[#f5f5f0]', border: 'border-[#e0e0da]' },
 };
 
 function useData<T>(url: string, interval = 30_000) {
@@ -236,7 +233,6 @@ export default function GuestView() {
         <div className="min-h-screen bg-[#f7f7f3] flex flex-col max-w-md mx-auto">
             <GdprBanner />
 
-            {/* Header */}
             <div className="bg-white border-b border-[#e5e5e0] px-5 py-4 flex items-center justify-between sticky top-0 z-10">
                 <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-lg bg-[#6b8a5e] flex items-center justify-center">
@@ -260,7 +256,6 @@ export default function GuestView() {
 
             <div className="flex-1 flex flex-col gap-4 px-4 py-5">
 
-                {/* Announcement */}
                 {announcement && (
                     <div className="bg-[#fffbf0] border border-[#f0d880] rounded-2xl px-4 py-4 flex items-start gap-3">
                         <Megaphone size={16} className="text-[#a07820] shrink-0 mt-0.5" />
@@ -268,7 +263,6 @@ export default function GuestView() {
                     </div>
                 )}
 
-                {/* Service hours */}
                 <div className="bg-white border border-[#e5e5e0] rounded-2xl px-4 py-3 flex items-center gap-3">
                     <Clock size={15} className="text-[#6b8a5e] shrink-0" />
                     <div>
@@ -279,7 +273,6 @@ export default function GuestView() {
                     </div>
                 </div>
 
-                {/* Crowd level */}
                 <div className={`rounded-2xl border ${cfg.bg} ${cfg.border} px-5 py-5`}>
                     <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-3 flex items-center gap-1.5">
                         <Users size={11} />
@@ -294,7 +287,6 @@ export default function GuestView() {
                     </div>
                 </div>
 
-                {/* Food availability */}
                 <div className="bg-white border border-[#e5e5e0] rounded-2xl overflow-hidden">
                     <div className="px-4 py-3.5 border-b border-[#e5e5e0] flex items-center gap-2">
                         <ChefHat size={15} className="text-[#6b8a5e]" />
@@ -307,15 +299,12 @@ export default function GuestView() {
                         <div className="px-4 py-8 text-center text-sm text-[#c0c0c0]">No items listed yet.</div>
                     ) : (
                         <div className="divide-y divide-[#f0f0eb]">
-                            {/* Available */}
                             {available.map((item) => (
                                 <FoodRow key={item.id} item={item} />
                             ))}
-                            {/* Low */}
                             {low.map((item) => (
                                 <FoodRow key={item.id} item={item} />
                             ))}
-                            {/* Sold out */}
                             {soldOut.map((item) => (
                                 <FoodRow key={item.id} item={item} />
                             ))}
@@ -323,7 +312,6 @@ export default function GuestView() {
                     )}
                 </div>
 
-                {/* Last updated */}
                 {lastUpdated && (
                     <div className="flex items-center justify-center gap-1.5 pb-2">
                         <Wifi size={10} className="text-[#c0c0c0]" />

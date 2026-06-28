@@ -34,7 +34,6 @@ interface CheckInRecord {
   note: string | null;
 }
 
-// ── Counter ───────────────────────────────────────────────────
 function Counter({
   label, value, onChange, max, min = 0,
 }: { label: string; value: number; onChange: (n: number) => void; max?: number; min?: number }) {
@@ -60,7 +59,6 @@ function Counter({
   );
 }
 
-// ── Shared walk-in modal body ─────────────────────────────────
 function WalkInModalBody({
   subtitle, onClose, onSubmit,
 }: { subtitle: string; onClose: () => void; onSubmit: (adults: number, children: number, note: string) => Promise<void> }) {
@@ -133,7 +131,6 @@ function WalkInModalBody({
   );
 }
 
-// ── Walk-in modal tied to a room ──────────────────────────────
 function WalkInModal({
   roomNumber, roomId, onClose, onSuccess,
 }: { roomNumber: string; roomId: number; onClose: () => void; onSuccess: () => void }) {
@@ -150,7 +147,6 @@ function WalkInModal({
   return <WalkInModalBody subtitle={`Room ${roomNumber} · Extra, not registered`} onClose={onClose} onSubmit={submit} />;
 }
 
-// ── Standalone walk-in modal (no room) ───────────────────────
 function StandaloneWalkInModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
   const submit = async (adults: number, children: number, note: string) => {
     const res = await fetch("/api/checkins", {
@@ -165,7 +161,6 @@ function StandaloneWalkInModal({ onClose, onSuccess }: { onClose: () => void; on
   return <WalkInModalBody subtitle="No room · Independent walk-in" onClose={onClose} onSubmit={submit} />;
 }
 
-// ── Main component ────────────────────────────────────────────
 export default function CheckInView() {
   const { staff }   = useAuth();
   const searchRef   = useRef<HTMLInputElement>(null);
@@ -211,14 +206,12 @@ export default function CheckInView() {
 
   if (!staff) return null;
 
-  // ── Capacity for selected room ──
   const registeredTotal    = selected ? selected.totalAdults + selected.totalChildren : 0;
   const alreadyCheckedIn   = selected?.checkedInCount ?? 0;
   const remainingCapacity  = Math.max(0, registeredTotal - alreadyCheckedIn);
   const remainingAdults    = selected ? Math.max(0, selected.totalAdults   - selected.checkedInAdults)   : 0;
   const remainingChildren  = selected ? Math.max(0, selected.totalChildren - selected.checkedInChildren) : 0;
 
-  // ── Derived lists ──
   const filtered = allRooms
     .filter((r) => {
       if (filterKey === "pending") return r.checkStatus === "none";
@@ -245,7 +238,6 @@ export default function CheckInView() {
     return true;
   });
 
-  // ── Grouping ──
   const showLetterGroups = sortKey === "name" && !searchQuery.trim() && filterKey === "all";
   const showFloorGroups  = sortKey === "room"  && !searchQuery.trim() && filterKey === "all";
   const grouped: { letter: string; rooms: RoomResult[] }[] = [];
@@ -269,12 +261,10 @@ export default function CheckInView() {
     grouped.sort((a, b) => parseInt(a.letter.replace("Floor ", "")) - parseInt(b.letter.replace("Floor ", "")));
   }
 
-  // ── Handlers ──
   const selectRoom = (room: RoomResult) => {
     setSelected(room);
     const remainingAdults   = Math.max(0, room.totalAdults   - room.checkedInAdults);
     const remainingChildren = Math.max(0, room.totalChildren - room.checkedInChildren);
-    // Override mode (room fully checked in): default to 1 adult so the button is enabled
     setAdultCount(remainingAdults === 0 && remainingChildren === 0 ? 1 : remainingAdults);
     setChildCount(remainingAdults === 0 && remainingChildren === 0 ? 0 : remainingChildren);
     setFlash(room.checkStatus === "full" ? { type: "duplicate", text: `Room ${room.roomNumber} already checked in today.` } : null);
@@ -326,7 +316,7 @@ export default function CheckInView() {
         body: JSON.stringify({ action: "checkout" }),
       });
       await loadAll();
-    } catch { /* ignore */ }
+    } catch { }
     setCheckingOutId(null);
   };
 
@@ -339,7 +329,7 @@ export default function CheckInView() {
         body: JSON.stringify({ action: "undo_checkout" }),
       });
       await loadAll();
-    } catch { /* ignore */ }
+    } catch { }
     setCheckingOutId(null);
   };
 
@@ -360,7 +350,7 @@ export default function CheckInView() {
         setGuestNoteOriginal(guestNote.trim());
         await loadAll();
       }
-    } catch { /* silent */ }
+    } catch { }
     setGuestNoteSaving(false);
   };
 
@@ -379,7 +369,7 @@ export default function CheckInView() {
         setGuestNoteOriginal("");
         await loadAll();
       }
-    } catch { /* silent */ }
+    } catch { }
     setGuestNoteSaving(false);
   };
 
@@ -402,14 +392,12 @@ export default function CheckInView() {
         />
       )}
 
-      {/* Sub-nav */}
       <div className="bg-white border-b border-[#e5e5e0] px-4 md:px-7">
         <div className="py-2">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">Check-In</span>
         </div>
       </div>
 
-      {/* Stats bar */}
       <div className="bg-white border-b border-[#e5e5e0] px-4 md:px-7 py-2.5 flex items-center gap-5 flex-wrap">
         <StatChip label="Rooms in"         value={stats?.totalCheckIns    ?? "–"} color="green" />
         <StatChip label="Currently inside" value={stats?.currentlyInside  ?? "–"} color="blue"  />
@@ -429,7 +417,6 @@ export default function CheckInView() {
       </div>
 
       <div className="flex flex-col lg:flex-row h-auto lg:h-[calc(100vh-160px)]">
-        {/* ── LEFT: Room list ── */}
         <div className="flex flex-col lg:flex-1 min-w-0 border-b lg:border-b-0 lg:border-r border-[#e5e5e0] max-h-[50vh] lg:max-h-none">
           <div className="bg-white border-b border-[#e5e5e0] px-4 py-3 flex flex-wrap items-center gap-2 shrink-0">
             <input
@@ -482,7 +469,6 @@ export default function CheckInView() {
           </div>
         </div>
 
-        {/* ── MIDDLE: Check-in card ── */}
         <div className="w-full lg:w-90 shrink-0 flex flex-col border-b lg:border-b-0 lg:border-r border-[#e5e5e0]">
           {selected ? (
             <div className="flex flex-col h-full overflow-y-auto">
@@ -503,7 +489,6 @@ export default function CheckInView() {
                   </div>
                 )}
 
-                {/* Guest info */}
                 <div className="bg-white border border-[#e5e5e0] rounded-xl p-4">
                   <div className="flex items-start gap-3 mb-3">
                     <div className="w-10 h-10 rounded-full bg-[#e8efe5] flex items-center justify-center text-sm font-bold text-[#4a7a3d] shrink-0">
@@ -543,7 +528,6 @@ export default function CheckInView() {
                   )}
                 </div>
 
-                {/* Guest note */}
                 {mainGuest && (
                   <div className="bg-white border border-[#e5e5e0] rounded-xl p-4 flex flex-col gap-2.5">
                     <div className="flex items-center justify-between">
@@ -580,7 +564,6 @@ export default function CheckInView() {
                   </div>
                 )}
 
-                {/* Capacity bar */}
                 <div className="bg-white border border-[#e5e5e0] rounded-xl p-3">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5">
@@ -604,7 +587,6 @@ export default function CheckInView() {
                   </p>
                 </div>
 
-                {/* Counters — shown when spots remain, or in override mode (room fully checked in) */}
                 {(remainingCapacity > 0 || isDuplicate) && (
                   <div className="bg-white border border-[#e5e5e0] rounded-xl p-4">
                     <div className="flex items-center justify-around">
@@ -662,7 +644,6 @@ export default function CheckInView() {
           )}
         </div>
 
-        {/* ── RIGHT: Activity ── */}
         <div className="w-full lg:w-67.5 shrink-0 flex flex-col">
           <div className="bg-white border-b border-[#e5e5e0] px-4 py-3 shrink-0">
             <div className="flex items-center justify-between mb-2">
@@ -743,7 +724,6 @@ export default function CheckInView() {
   );
 }
 
-// ── Room row ──────────────────────────────────────────────────
 function RoomRow({ room, selected, onClick }: { room: RoomResult; selected: boolean; onClick: () => void }) {
   const mainGuest = room.guests.find((g) => !g.isChild) ?? room.guests[0];
   const names = room.guests.map((g) => g.name).join(", ");
@@ -775,7 +755,6 @@ function RoomRow({ room, selected, onClick }: { room: RoomResult; selected: bool
   );
 }
 
-// ── Stat chip ─────────────────────────────────────────────────
 function StatChip({ label, value, color }: { label: string; value: number | string; color: "green" | "blue" | "amber" | "grey" | "red" }) {
   const cls = { green: "bg-[#e8efe5] text-[#4a7a3d]", blue: "bg-[#e5eff5] text-[#3d5c7a]", amber: "bg-[#fff3e8] text-[#a05c1e]", grey: "bg-[#f0f0eb] text-[#6b6b6b]", red: "bg-[#fdeeee] text-[#c04040]" };
   return (

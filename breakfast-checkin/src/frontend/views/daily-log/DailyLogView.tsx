@@ -32,11 +32,11 @@ const CATEGORY_CONFIG: Record<
   LogCategory,
   { label: string; icon: React.ElementType; color: string; bg: string; border: string; leftBar: string }
 > = {
-  SHIFT_NOTE:   { label: "Shift Note",   icon: ClipboardList,  color: "text-[#4a7a3d]", bg: "bg-[#e8efe5]", border: "border-[#c8dcc0]", leftBar: "bg-[#6b8a5e]" },
-  INCIDENT:     { label: "Incident",     icon: AlertTriangle,  color: "text-[#c04040]", bg: "bg-[#fdeeee]", border: "border-[#f0c8c8]", leftBar: "bg-[#d45f5f]" },
-  VIP:          { label: "VIP",          icon: Star,           color: "text-[#a05c1e]", bg: "bg-[#fff3e8]", border: "border-[#f0d8b8]", leftBar: "bg-[#c07820]" },
-  KITCHEN:      { label: "Kitchen",      icon: UtensilsCrossed,color: "text-[#2e6a82]", bg: "bg-[#e5eff3]", border: "border-[#b8d8e8]", leftBar: "bg-[#3a8aaa]" },
-  HOUSEKEEPING: { label: "Housekeeping", icon: Sparkles,       color: "text-[#6a3e8a]", bg: "bg-[#f3eef8]", border: "border-[#d8c8ec]", leftBar: "bg-[#8a5aaa]" },
+  SHIFT_NOTE: { label: "Shift Note", icon: ClipboardList, color: "text-[#4a7a3d]", bg: "bg-[#e8efe5]", border: "border-[#c8dcc0]", leftBar: "bg-[#6b8a5e]" },
+  INCIDENT: { label: "Incident", icon: AlertTriangle, color: "text-[#c04040]", bg: "bg-[#fdeeee]", border: "border-[#f0c8c8]", leftBar: "bg-[#d45f5f]" },
+  VIP: { label: "VIP", icon: Star, color: "text-[#a05c1e]", bg: "bg-[#fff3e8]", border: "border-[#f0d8b8]", leftBar: "bg-[#c07820]" },
+  KITCHEN: { label: "Kitchen", icon: UtensilsCrossed, color: "text-[#2e6a82]", bg: "bg-[#e5eff3]", border: "border-[#b8d8e8]", leftBar: "bg-[#3a8aaa]" },
+  HOUSEKEEPING: { label: "Housekeeping", icon: Sparkles, color: "text-[#6a3e8a]", bg: "bg-[#f3eef8]", border: "border-[#d8c8ec]", leftBar: "bg-[#8a5aaa]" },
 };
 
 const CATEGORIES = Object.entries(CATEGORY_CONFIG) as [LogCategory, typeof CATEGORY_CONFIG[LogCategory]][];
@@ -57,7 +57,6 @@ function staffShort(name: string): string {
   return parts.length >= 2 ? `${parts[0]} ${parts[parts.length - 1][0]}.` : parts[0];
 }
 
-// Consistent avatar color per name
 const AVATAR_COLORS = [
   "bg-[#6b8a5e] text-white",
   "bg-[#c07820] text-white",
@@ -73,15 +72,15 @@ function avatarColor(name: string): string {
 
 export default function DailyLogView() {
   const { staff } = useAuth();
-  const [entries, setEntries]       = useState<LogEntry[]>([]);
-  const [category, setCategory]     = useState<LogCategory>("SHIFT_NOTE");
-  const [content, setContent]       = useState("");
-  const [saving, setSaving]         = useState(false);
-  const [saveError, setSaveError]   = useState<string | null>(null);
+  const [entries, setEntries] = useState<LogEntry[]>([]);
+  const [category, setCategory] = useState<LogCategory>("SHIFT_NOTE");
+  const [content, setContent] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
-  const [pinningId, setPinningId]   = useState<number | null>(null);
-  const [filterCat, setFilterCat]   = useState<LogCategory | "ALL">("ALL");
-  const [search, setSearch]         = useState("");
+  const [pinningId, setPinningId] = useState<number | null>(null);
+  const [filterCat, setFilterCat] = useState<LogCategory | "ALL">("ALL");
+  const [search, setSearch] = useState("");
 
   const loadEntries = useCallback(async () => {
     const res = await fetch("/api/daily-log");
@@ -93,7 +92,6 @@ export default function DailyLogView() {
 
   if (!staff) return null;
 
-  // ── derived ──
   const counts = Object.fromEntries(
     CATEGORIES.map(([k]) => [k, entries.filter((e) => e.category === k).length])
   ) as Record<LogCategory, number>;
@@ -110,7 +108,6 @@ export default function DailyLogView() {
   const pinned = filtered.filter((e) => e.isPinned);
   const normal = filtered.filter((e) => !e.isPinned);
 
-  // ── handlers ──
   const handleSave = async () => {
     if (!content.trim()) return;
     setSaving(true);
@@ -159,7 +156,6 @@ export default function DailyLogView() {
     <div className="bg-[#f5f5f0] min-h-screen">
       <TopBar title="Breakfast Check-In" subtitle="Daily staff log" staff={staff} />
 
-      {/* Sub-nav */}
       <div className="bg-white border-b border-[#e5e5e0] px-4 md:px-7">
         <div className="py-2.5">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">Daily Log</span>
@@ -168,10 +164,8 @@ export default function DailyLogView() {
 
       <div className="p-4 md:p-7 grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 items-start">
 
-        {/* ── LEFT: Compose ── */}
         <div className="lg:sticky lg:top-6 flex flex-col gap-4">
 
-          {/* Compose card */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
             <div className="px-5 py-4 border-b border-[#e5e5e0] flex items-center gap-2">
               <Plus size={15} className="text-[#6b8a5e]" />
@@ -180,7 +174,6 @@ export default function DailyLogView() {
             </div>
 
             <div className="p-5 flex flex-col gap-4">
-              {/* Category picker */}
               <div className="flex flex-col gap-2">
                 <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider">Category</p>
                 <div className="flex flex-col gap-1.5">
@@ -206,7 +199,6 @@ export default function DailyLogView() {
                 </div>
               </div>
 
-              {/* Textarea */}
               <div>
                 <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-2">Note</p>
                 <textarea
@@ -232,7 +224,6 @@ export default function DailyLogView() {
             </div>
           </div>
 
-          {/* Category summary */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl p-4">
             <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-3">Today&apos;s Summary</p>
             <div className="flex flex-col gap-2">
@@ -255,12 +246,9 @@ export default function DailyLogView() {
           </div>
         </div>
 
-        {/* ── RIGHT: Log feed ── */}
         <div className="flex flex-col gap-4">
 
-          {/* Filter + search bar */}
           <div className="flex items-center gap-3">
-            {/* Search */}
             <div className="relative flex-1">
               <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9e9e9e]" />
               <input
@@ -272,7 +260,6 @@ export default function DailyLogView() {
               />
             </div>
 
-            {/* Category filter pills */}
             <div className="flex items-center gap-1.5 flex-wrap">
               <button
                 onClick={() => setFilterCat("ALL")}
@@ -306,7 +293,6 @@ export default function DailyLogView() {
             </div>
           </div>
 
-          {/* Entries */}
           {filtered.length === 0 ? (
             <div className="bg-white border border-[#e5e5e0] rounded-xl py-16 flex flex-col items-center gap-3 text-center">
               <BookOpen size={32} className="text-[#d5d5d0]" />
@@ -319,7 +305,6 @@ export default function DailyLogView() {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              {/* Pinned section */}
               {pinned.length > 0 && (
                 <>
                   <div className="flex items-center gap-2 px-1">
@@ -346,7 +331,6 @@ export default function DailyLogView() {
                 </>
               )}
 
-              {/* Normal entries */}
               {normal.map((entry) => (
                 <EntryCard
                   key={entry.id}
@@ -365,7 +349,6 @@ export default function DailyLogView() {
   );
 }
 
-// ── Entry card ────────────────────────────────────────────────
 function EntryCard({
   entry,
   onPin,
@@ -388,13 +371,10 @@ function EntryCard({
       entry.isPinned ? "border-[#b8d4b0]" : "border-[#e5e5e0]"
     }`}>
       <div className="flex">
-        {/* Left color bar */}
         <div className={`w-1 shrink-0 ${cfg.leftBar}`} />
 
         <div className="flex-1 min-w-0 px-4 py-3.5">
-          {/* Top row */}
           <div className="flex items-center gap-2 mb-2.5">
-            {/* Category badge */}
             <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${cfg.bg} ${cfg.color} ${cfg.border}`}>
               <Icon size={10} />
               {cfg.label}
@@ -404,17 +384,14 @@ function EntryCard({
               <Pin size={11} className="text-[#6b8a5e]" />
             )}
 
-            {/* Time */}
             <span className="text-xs text-[#9e9e9e]">{formatTime(entry.createdAt)}</span>
 
-            {/* Staff avatar */}
             <div className="ml-auto flex items-center gap-2">
               <span className="text-xs text-[#9e9e9e]">{staffShort(entry.staffName)}</span>
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${avatarColor(entry.staffName)}`}>
                 {staffInitials(entry.staffName)}
               </div>
 
-              {/* Actions */}
               <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
                 <button
                   onClick={() => onPin(entry)}
@@ -459,7 +436,6 @@ function EntryCard({
             </div>
           </div>
 
-          {/* Content */}
           <p className="text-sm text-[#2d2d2d] leading-relaxed whitespace-pre-wrap">{entry.content}</p>
         </div>
       </div>

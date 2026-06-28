@@ -1,8 +1,3 @@
-// ===========================================
-// usePolling - Fetch data on an interval
-// ===========================================
-// Used by the dashboard to refresh every 15 seconds.
-
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -38,7 +33,7 @@ export function usePolling<T>(
   }, [url]);
 
   useEffect(() => {
-    fetchData(); // Initial fetch
+    fetchData();
     const timer = setInterval(fetchData, interval);
     return () => clearInterval(timer);
   }, [fetchData, interval]);

@@ -70,7 +70,6 @@ export default function GuestDetailView() {
         staff={staff}
       />
 
-      {/* Page tab */}
       <div className="bg-white border-b border-[#e5e5e0] px-7">
         <div className="py-2">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">
@@ -80,7 +79,6 @@ export default function GuestDetailView() {
       </div>
 
       <div className="p-7">
-        {/* Back link */}
         <button
           onClick={() => router.back()}
           className="flex items-center gap-1.5 text-sm text-[#6b6b6b] hover:text-[#2d2d2d] mb-6 transition-colors"
@@ -103,14 +101,11 @@ export default function GuestDetailView() {
 
         {guest && (
           <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
-            {/* Header row */}
             <div className="flex items-center gap-6 px-8 py-6 border-b border-[#e5e5e0]">
-              {/* Avatar */}
               <div className="w-16 h-16 rounded-full bg-[#e8efe5] flex items-center justify-center text-xl font-semibold text-[#4a7a3d] shrink-0">
                 {guest.name.charAt(0)}
               </div>
 
-              {/* Name + badges */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h2 className="text-lg font-semibold text-[#2d2d2d]">
@@ -133,7 +128,6 @@ export default function GuestDetailView() {
               </div>
             </div>
 
-            {/* Stats row */}
             <div className="grid grid-cols-4 divide-x divide-[#e5e5e0] border-b border-[#e5e5e0]">
               <div className="px-8 py-5">
                 <p className="text-xs text-[#9e9e9e] mb-1">Room</p>
@@ -163,7 +157,6 @@ export default function GuestDetailView() {
               </div>
             </div>
 
-            {/* Roommates */}
             {guest.roommates.length > 0 && (
               <div className="px-8 py-5 border-b border-[#e5e5e0]">
                 <p className="text-sm font-semibold text-[#2d2d2d] mb-3">
@@ -185,7 +178,6 @@ export default function GuestDetailView() {
               </div>
             )}
 
-            {/* Notes */}
             {guest.notes && (
               <div className="px-8 py-5 border-b border-[#e5e5e0]">
                 <p className="text-sm font-semibold text-[#2d2d2d] mb-1">Notes</p>
@@ -193,7 +185,6 @@ export default function GuestDetailView() {
               </div>
             )}
 
-            {/* Breakfast visit history */}
             <div className="px-8 py-5">
               <p className="text-sm font-semibold text-[#2d2d2d] mb-4">
                 Recent Breakfast Visits

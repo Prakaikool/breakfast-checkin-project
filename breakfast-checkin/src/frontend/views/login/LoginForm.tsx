@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/frontend/hooks/useAuth";
 
 export default function LoginForm() {
-  const [email, setEmail]       = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError]       = useState("");
-  const [loading, setLoading]   = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
 
@@ -30,7 +30,6 @@ export default function LoginForm() {
   return (
     <div className="w-100 bg-white rounded-2xl shadow-sm border border-[#e5e5e0] p-8">
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Email */}
         <div>
           <label className="block text-xs font-semibold text-[#9e9e9e] uppercase tracking-wide mb-1.5">
             Email
@@ -46,7 +45,6 @@ export default function LoginForm() {
           />
         </div>
 
-        {/* Password */}
         <div>
           <label className="block text-xs font-semibold text-[#9e9e9e] uppercase tracking-wide mb-1.5">
             Password
@@ -85,7 +83,6 @@ export default function LoginForm() {
           </p>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="flex items-start gap-2 bg-[#fdeeee] border border-[#f5c0c0] text-[#c04040] text-sm px-3 py-2.5 rounded-lg">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0 mt-0.5"><circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5"/><path d="M7 4v3M7 9.5v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
@@ -93,7 +90,6 @@ export default function LoginForm() {
           </div>
         )}
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={loading || !email || !password}

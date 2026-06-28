@@ -1,6 +1,3 @@
-// ===========================================
-// useAuth - Authentication hook
-// ===========================================
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -10,7 +7,6 @@ export function useAuth() {
   const [staff, setStaff] = useState<StaffInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is logged in
   const checkAuth = useCallback(async () => {
     try {
       const res = await fetch("/api/auth/me");
@@ -31,7 +27,6 @@ export function useAuth() {
     checkAuth();
   }, [checkAuth]);
 
-  // Login
   const login = async (email: string, password: string) => {
     const res = await fetch("/api/auth/login", {
       method: "POST",
@@ -46,7 +41,6 @@ export function useAuth() {
     return { success: false, error: data.error };
   };
 
-  // Logout
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setStaff(null);

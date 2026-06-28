@@ -125,7 +125,6 @@ export default function DisplayView() {
 
     return (
         <div className="bg-[#f7f7f3] min-h-screen flex flex-col select-none overflow-hidden">
-            {/* Top bar */}
             <div className="bg-white border-b border-[#e0e0da] flex items-center justify-between px-10 py-4 shrink-0">
                 <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-[#6b8a5e] flex items-center justify-center">
@@ -148,10 +147,8 @@ export default function DisplayView() {
                 </div>
             </div>
 
-            {/* Main content */}
             <div className="flex-1 flex flex-col items-center justify-center px-10 py-8 gap-6">
 
-                {/* Announcement — shown at the top when active */}
                 {announcement && (
                     <div className="w-full max-w-2xl bg-[#fffbf0] border border-[#f0e0a0] rounded-2xl px-7 py-5 flex items-start gap-4">
                         <Megaphone
@@ -164,7 +161,6 @@ export default function DisplayView() {
                     </div>
                 )}
 
-                {/* Title */}
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-[#2d2d2d] tracking-wide uppercase">
                         Breakfast Status
@@ -174,7 +170,6 @@ export default function DisplayView() {
                     </p>
                 </div>
 
-                {/* Crowd level card */}
                 <div
                     className={`w-full max-w-2xl rounded-3xl border-2 ${cfg.bg} ${cfg.border} flex flex-col items-center py-10 px-8 gap-3`}
                 >
@@ -195,7 +190,6 @@ export default function DisplayView() {
                     <p className="text-lg text-[#6b6b6b]">{cfg.sub}</p>
                 </div>
 
-                {/* Crowd trend */}
                 <div className="w-full max-w-2xl bg-white border border-[#e5e5e0] rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-5">
                         <p className="text-sm font-bold text-[#2d2d2d] uppercase tracking-wider">
@@ -261,7 +255,6 @@ export default function DisplayView() {
                 </div>
             </div>
 
-            {/* Footer */}
             <div className="bg-white border-t border-[#e0e0da] flex items-center justify-center gap-6 px-10 py-4 shrink-0">
                 <span className="text-sm font-semibold text-[#6b8a5e]">
                     Breakfast Service

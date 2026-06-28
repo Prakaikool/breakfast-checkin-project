@@ -21,7 +21,6 @@ export default function TopBar({ title, subtitle, staff }: TopBarProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Close when clicking outside
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -48,7 +47,6 @@ export default function TopBar({ title, subtitle, staff }: TopBarProps) {
           {formatDate(now)}, {formatTime(now)}
         </span>
 
-        {/* Staff dropdown */}
         <div className="relative" ref={ref}>
           <button
             onClick={() => setOpen((o) => !o)}

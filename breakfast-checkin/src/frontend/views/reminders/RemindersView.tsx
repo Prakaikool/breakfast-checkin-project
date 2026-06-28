@@ -25,26 +25,25 @@ type ReminderStatus = "ACTIVE" | "COMPLETED" | "OVERDUE";
 interface Reminder {
   id: number;
   title: string;
-  time: string; // HH:MM — the actual fire time stored in DB
+  time: string;
   recurrence: Recurrence;
   status: ReminderStatus;
   isOverdue: boolean;
 }
 
 const RECURRENCE: Record<Recurrence, { label: string; icon: React.ElementType; short: string }> = {
-  TODAY:     { label: "Today only", icon: CalendarDays,  short: "Today"    },
-  EVERY_DAY: { label: "Every day",  icon: Repeat2,       short: "Daily"    },
-  WEEKDAYS:  { label: "Weekdays",   icon: CalendarRange, short: "Weekdays" },
+  TODAY: { label: "Today only", icon: CalendarDays, short: "Today" },
+  EVERY_DAY: { label: "Every day", icon: Repeat2, short: "Daily" },
+  WEEKDAYS: { label: "Weekdays", icon: CalendarRange, short: "Weekdays" },
 };
 
-// Notify-before offsets in minutes
 const NOTIFY_OFFSETS = [
-  { label: "At time",    value: 0  },
-  { label: "5 min",      value: 5  },
-  { label: "10 min",     value: 10 },
-  { label: "15 min",     value: 15 },
-  { label: "30 min",     value: 30 },
-  { label: "1 hour",     value: 60 },
+  { label: "At time", value: 0 },
+  { label: "5 min", value: 5 },
+  { label: "10 min", value: 10 },
+  { label: "15 min", value: 15 },
+  { label: "30 min", value: 30 },
+  { label: "1 hour", value: 60 },
 ];
 
 function subtractMinutes(time: string, minutes: number): string {
@@ -54,10 +53,6 @@ function subtractMinutes(time: string, minutes: number): string {
   const rh = Math.floor(safeTotal / 60);
   const rm = safeTotal % 60;
   return `${String(rh).padStart(2, "0")}:${String(rm).padStart(2, "0")}`;
-}
-
-function formatTimeLabel(time: string): string {
-  return time; // already HH:MM
 }
 
 export default function RemindersView() {
@@ -75,7 +70,6 @@ export default function RemindersView() {
   const [hasNotifAPI, setHasNotifAPI] = useState(false);
   const notifiedIds = useRef<Set<number>>(new Set());
 
-  // Computed notify-at time
   const notifyAt = subtractMinutes(eventTime, notifyBefore);
   const showOffset = notifyBefore > 0;
 
@@ -87,7 +81,6 @@ export default function RemindersView() {
 
   useEffect(() => { load(); }, [load]);
 
-  // ── Browser notification permission ──
   useEffect(() => {
     if ("Notification" in window) {
       setHasNotifAPI(true);
@@ -101,7 +94,6 @@ export default function RemindersView() {
     setNotifPerm(perm);
   };
 
-  // ── Poll every 30s and fire browser notifications ──
   useEffect(() => {
     const check = () => {
       if (notifPerm !== "granted") return;
@@ -166,7 +158,6 @@ export default function RemindersView() {
     setDeletingId(null);
   };
 
-  // ── derived ──
   const overdueList   = reminders.filter((r) => r.status !== "COMPLETED" && r.isOverdue);
   const activeList    = reminders.filter((r) => r.status !== "COMPLETED" && !r.isOverdue);
   const completedList = reminders.filter((r) => r.status === "COMPLETED");
@@ -177,7 +168,6 @@ export default function RemindersView() {
     <div className="bg-[#f5f5f0] min-h-screen">
       <TopBar title="Breakfast Check-In" subtitle="Task reminders" staff={staff} />
 
-      {/* Sub-nav */}
       <div className="bg-white border-b border-[#e5e5e0] px-4 md:px-7">
         <div className="py-2.5">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">Reminders</span>
@@ -186,7 +176,6 @@ export default function RemindersView() {
 
       <div className="p-4 md:p-7 grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
 
-        {/* ── LEFT: Compose ── */}
         <div className="lg:sticky lg:top-6 flex flex-col gap-4">
           <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
             <div className="px-5 py-4 border-b border-[#e5e5e0] flex items-center gap-2">
@@ -196,7 +185,6 @@ export default function RemindersView() {
 
             <div className="p-5 flex flex-col gap-5">
 
-              {/* Title */}
               <div>
                 <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-2">Task</p>
                 <input
@@ -209,7 +197,6 @@ export default function RemindersView() {
                 />
               </div>
 
-              {/* Event time */}
               <div>
                 <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-2">Event time</p>
                 <input
@@ -220,7 +207,6 @@ export default function RemindersView() {
                 />
               </div>
 
-              {/* Notify before */}
               <div>
                 <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-2">Notify me</p>
                 <div className="grid grid-cols-3 gap-1.5">
@@ -239,7 +225,6 @@ export default function RemindersView() {
                   ))}
                 </div>
 
-                {/* Computed result */}
                 <div className={`mt-3 flex items-center gap-2 px-3 py-2.5 rounded-lg border ${
                   showOffset ? "bg-[#fffbf0] border-[#f0e0a0]" : "bg-[#f0f5ef] border-[#c8dcc0]"
                 }`}>
@@ -257,7 +242,6 @@ export default function RemindersView() {
                 </div>
               </div>
 
-              {/* Recurrence */}
               <div>
                 <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-2">Repeat</p>
                 <div className="flex flex-col gap-1.5">
@@ -294,7 +278,6 @@ export default function RemindersView() {
             </div>
           </div>
 
-          {/* Notification permission banner */}
           {hasNotifAPI && notifPerm !== "granted" && (
             <button
               onClick={requestNotifPermission}
@@ -325,7 +308,6 @@ export default function RemindersView() {
             </div>
           )}
 
-          {/* Progress card */}
           {totalToday > 0 && (
             <div className="bg-white border border-[#e5e5e0] rounded-xl p-4">
               <div className="flex items-center justify-between mb-3">
@@ -343,10 +325,8 @@ export default function RemindersView() {
           )}
         </div>
 
-        {/* ── RIGHT: List ── */}
         <div className="flex flex-col gap-4">
 
-          {/* Stats + tabs */}
           <div className="flex items-center gap-3 flex-wrap">
             {overdueList.length > 0 && (
               <div className="flex items-center gap-1.5 bg-[#fdeeee] text-[#c04040] text-xs font-semibold px-3 py-1.5 rounded-full">
@@ -383,7 +363,6 @@ export default function RemindersView() {
             </div>
           </div>
 
-          {/* Active tab */}
           {activeTab === "active" && (
             <>
               {overdueList.length > 0 && (
@@ -424,7 +403,6 @@ export default function RemindersView() {
             </>
           )}
 
-          {/* Completed tab */}
           {activeTab === "completed" && (
             completedList.length === 0 ? (
               <EmptyState icon={CheckCircle2} title="Nothing completed yet" sub="Check off reminders as you finish them." />
@@ -442,7 +420,6 @@ export default function RemindersView() {
   );
 }
 
-// ── Empty state ──────────────────────────────────────────────
 function EmptyState({ icon: Icon, title, sub }: { icon: React.ElementType; title: string; sub: string }) {
   return (
     <div className="bg-white border border-[#e5e5e0] rounded-xl py-16 flex flex-col items-center gap-3">
@@ -455,7 +432,6 @@ function EmptyState({ icon: Icon, title, sub }: { icon: React.ElementType; title
   );
 }
 
-// ── Reminder card ────────────────────────────────────────────
 function ReminderCard({
   reminder: r,
   onToggle,
@@ -480,13 +456,11 @@ function ReminderCard({
                     "border-[#e5e5e0]"
     }`}>
       <div className="flex items-center">
-        {/* Accent bar */}
         <div className={`w-1 self-stretch shrink-0 ${
           isOverdue ? "bg-[#d45f5f]" : isCompleted ? "bg-[#c8dcc0]" : "bg-[#6b8a5e]"
         }`} />
 
         <div className="flex items-center gap-3 px-4 py-3.5 flex-1 min-w-0">
-          {/* Checkbox */}
           <button
             onClick={() => onToggle(r)}
             className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
@@ -498,7 +472,6 @@ function ReminderCard({
             {isCompleted && <Check size={10} strokeWidth={3} className="text-white" />}
           </button>
 
-          {/* Notify time badge */}
           <div className={`shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold border ${
             isOverdue   ? "bg-[#fdeeee] text-[#c04040] border-[#f5c0c0]" :
             isCompleted ? "bg-[#f0f0eb] text-[#b0b0b0] border-[#e5e5e0]" :
@@ -508,7 +481,6 @@ function ReminderCard({
             {r.time}
           </div>
 
-          {/* Content */}
           <div className="flex-1 min-w-0">
             <p className={`text-sm font-medium truncate ${
               isCompleted ? "line-through text-[#b0b0b0]" : "text-[#2d2d2d]"
@@ -524,7 +496,6 @@ function ReminderCard({
             </div>
           </div>
 
-          {/* Status + delete */}
           <div className="shrink-0 flex items-center gap-2">
             {isCompleted && (
               <span className="text-[11px] bg-[#e8efe5] text-[#4a7a3d] px-2 py-0.5 rounded-md font-medium flex items-center gap-1">

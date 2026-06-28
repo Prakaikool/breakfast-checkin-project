@@ -7,26 +7,26 @@ import type { KitchenItem } from "@/types";
 
 const STATUS_OPTIONS: { value: KitchenItem["status"]; label: string }[] = [
   { value: "AVAILABLE", label: "Available" },
-  { value: "LOW",       label: "Running Low" },
-  { value: "SOLD_OUT",  label: "Sold Out" },
+  { value: "LOW", label: "Running Low" },
+  { value: "SOLD_OUT", label: "Sold Out" },
 ];
 
 const STATUS_STYLES: Record<KitchenItem["status"], {
   dot: string; card: string; select: string;
 }> = {
   AVAILABLE: {
-    dot:    "bg-[#4a7a3d]",
-    card:   "border-[#e5e5e0]",
+    dot: "bg-[#4a7a3d]",
+    card: "border-[#e5e5e0]",
     select: "bg-[#e8efe5] text-[#4a7a3d] border-[#c4dabb]",
   },
   LOW: {
-    dot:    "bg-[#d4893f]",
-    card:   "border-[#f5d9b8]",
+    dot: "bg-[#d4893f]",
+    card: "border-[#f5d9b8]",
     select: "bg-[#fff3e8] text-[#a05c1e] border-[#f0c89a]",
   },
   SOLD_OUT: {
-    dot:    "bg-[#d45f5f]",
-    card:   "border-[#f5c0c0]",
+    dot: "bg-[#d45f5f]",
+    card: "border-[#f5c0c0]",
     select: "bg-[#fdeeee] text-[#c04040] border-[#f0a8a8]",
   },
 };
@@ -84,7 +84,6 @@ export default function KitchenView() {
       </div>
 
       <div className="p-4 md:p-7 max-w-5xl">
-        {/* Summary bar */}
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center gap-1.5 bg-[#e8efe5] px-3 py-1.5 rounded-full">
             <span className="w-1.5 h-1.5 rounded-full bg-[#4a7a3d]" />

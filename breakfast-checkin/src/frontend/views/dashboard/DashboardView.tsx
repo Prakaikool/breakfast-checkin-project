@@ -20,7 +20,6 @@ interface TimelineSlot {
   people: number;
 }
 
-// Custom tooltip for the bar chart
 function ChartTooltip({ active, payload, label }: {
   active?: boolean;
   payload?: { value: number }[];
@@ -79,7 +78,6 @@ export default function DashboardView() {
       </div>
 
       <div className="p-4 md:p-7">
-        {/* Stats cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <StatCard label="Total check-ins" value={stats?.totalCheckIns ?? "–"} />
           <StatCard label="People inside" value={stats?.totalPeopleInside ?? "–"} />
@@ -93,7 +91,6 @@ export default function DashboardView() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Check-ins over time - recharts BarChart */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold text-[#2d2d2d]">Check-ins over time</h3>
@@ -146,7 +143,6 @@ export default function DashboardView() {
             )}
           </div>
 
-          {/* Kitchen status */}
           <div className="bg-white border border-[#e5e5e0] rounded-xl p-5">
             <h3 className="text-sm font-semibold text-[#2d2d2d] mb-4">Kitchen status preview</h3>
 
@@ -157,7 +153,6 @@ export default function DashboardView() {
               </span>
             </div>
 
-            {/* Hourly breakdown */}
             <div className="space-y-2 mt-4">
               {timeline
                 .filter((s) => s.people > 0)

@@ -35,7 +35,6 @@ interface EditDraft {
   imageUrl: string;
 }
 
-// ─── Image with fallback ──────────────────────────────────────
 function SectionImage({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
 
@@ -63,7 +62,6 @@ function SectionImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-// ─── Single section (view mode) ───────────────────────────────
 function SectionCard({
   section,
   isAdmin,
@@ -92,12 +90,10 @@ function SectionCard({
 
   return (
     <div className={`bg-white border border-[#e5e5e0] rounded-xl overflow-hidden transition-shadow ${open ? "shadow-sm" : ""}`}>
-      {/* Header row */}
       <div
         className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-[#fafaf8] transition-colors"
         onClick={() => setOpen((o) => !o)}
       >
-        {/* Reorder handles (admin only) */}
         {isAdmin && isEditing && (
           <div className="flex flex-col gap-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
             <button
@@ -118,7 +114,6 @@ function SectionCard({
         )}
         {isAdmin && isEditing && <GripVertical size={14} className="text-[#d0d0d0] shrink-0" />}
 
-        {/* Number badge */}
         <div className="w-7 h-7 rounded-full bg-[#e8efe5] flex items-center justify-center shrink-0">
           <span className="text-[11px] font-bold text-[#5a7a4e]">{section.sortOrder}</span>
         </div>
@@ -130,7 +125,6 @@ function SectionCard({
           )}
         </div>
 
-        {/* Admin actions */}
         {isAdmin && isEditing && (
           <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
             <button
@@ -154,18 +148,15 @@ function SectionCard({
         />
       </div>
 
-      {/* Expandable content */}
       <div
         ref={contentRef}
         className={`overflow-hidden transition-all duration-200 ${open ? "max-h-500 opacity-100" : "max-h-0 opacity-0"}`}
       >
         <div className="px-5 pb-5 border-t border-[#f0f0eb] pt-4">
-          {/* Content text */}
           <p className="text-sm text-[#4a4a4a] leading-relaxed whitespace-pre-wrap">
             {section.content}
           </p>
 
-          {/* Image */}
           {section.imageUrl && (
             <div className="mt-4">
               <SectionImage src={section.imageUrl} alt={section.title} />
@@ -177,7 +168,6 @@ function SectionCard({
   );
 }
 
-// ─── Edit modal ───────────────────────────────────────────────
 function EditModal({
   initial,
   onSave,
@@ -232,7 +222,6 @@ function EditModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl flex flex-col max-h-[90vh]">
 
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e5e0] shrink-0">
           <p className="text-sm font-semibold text-[#2d2d2d]">
             {initial.title ? "Edit Section" : "Add Section"}
@@ -242,10 +231,8 @@ function EditModal({
           </button>
         </div>
 
-        {/* Body */}
         <div className="flex-1 overflow-y-auto px-6 py-5 flex flex-col gap-5">
 
-          {/* Title */}
           <div>
             <label className="text-xs font-semibold text-[#6b6b6b] uppercase tracking-wide mb-1.5 block">
               Section Title
@@ -259,7 +246,6 @@ function EditModal({
             />
           </div>
 
-          {/* Content */}
           <div>
             <label className="text-xs font-semibold text-[#6b6b6b] uppercase tracking-wide mb-1.5 block">
               Content
@@ -274,13 +260,11 @@ function EditModal({
             <p className="text-[11px] text-[#c0c0c0] mt-1">Line breaks and spacing are preserved when displayed.</p>
           </div>
 
-          {/* Image */}
           <div>
             <label className="text-xs font-semibold text-[#6b6b6b] uppercase tracking-wide mb-2 block">
               Image <span className="font-normal normal-case text-[#c0c0c0]">(optional)</span>
             </label>
 
-            {/* Tabs */}
             <div className="flex items-center gap-1 bg-[#f5f5f0] rounded-lg p-1 mb-3 w-fit">
               <button
                 onClick={() => setImageTab("upload")}
@@ -345,7 +329,6 @@ function EditModal({
               </p>
             )}
 
-            {/* Preview */}
             {draft.imageUrl && !uploading && (
               <div className="mt-3">
                 <div className="flex items-center justify-between mb-1.5">
@@ -363,7 +346,6 @@ function EditModal({
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-[#e5e5e0] shrink-0">
           <button
             onClick={onCancel}
@@ -385,7 +367,6 @@ function EditModal({
   );
 }
 
-// ─── Main view ────────────────────────────────────────────────
 export default function InstructionView() {
   const { staff } = useAuth();
 
@@ -410,7 +391,6 @@ export default function InstructionView() {
 
   if (!staff) return null;
 
-  // ── handlers ──
   async function handleSave(draft: EditDraft) {
     setSaving(true);
     if (editTarget) {
@@ -453,14 +433,12 @@ export default function InstructionView() {
     <div className="bg-[#f5f5f0] min-h-screen">
       <TopBar title="Breakfast Check-In" subtitle="Staff guide and procedures" staff={staff} />
 
-      {/* Page tab */}
       <div className="bg-white border-b border-[#e5e5e0] px-7">
         <div className="py-2 flex items-center justify-between">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">
             Instructions
           </span>
 
-          {/* Admin controls */}
           {isAdmin && (
             <div className="flex items-center gap-2 pb-1">
               {isEditing ? (
@@ -492,7 +470,6 @@ export default function InstructionView() {
       </div>
 
       <div className="p-7 max-w-3xl">
-        {/* Role banner */}
         {!isAdmin && (
           <div className="flex items-start gap-3 bg-white border border-[#e5e5e0] rounded-xl px-5 py-3.5 mb-5">
             <BookOpen size={16} className="text-[#6b8a5e] shrink-0 mt-0.5" />
@@ -511,7 +488,6 @@ export default function InstructionView() {
           </div>
         )}
 
-        {/* Sections list */}
         {loading ? (
           <div className="flex flex-col gap-3">
             {[...Array(4)].map((_, i) => (
@@ -557,7 +533,6 @@ export default function InstructionView() {
         )}
       </div>
 
-      {/* Edit / Add modal */}
       {modalOpen && (
         <EditModal
           initial={

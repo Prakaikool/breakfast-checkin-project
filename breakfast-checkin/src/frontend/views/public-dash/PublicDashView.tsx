@@ -33,10 +33,10 @@ interface PublicStatus {
 type Level = "LOW" | "MODERATE" | "BUSY" | "VERY_BUSY";
 
 const LEVEL_CONFIG: Record<Level, { color: string; bg: string; border: string; dot: string; label: string }> = {
-  LOW:       { color: "text-[#4a7a3d]", bg: "bg-[#e8efe5]", border: "border-[#b8d9b0]", dot: "bg-[#6b8a5e]", label: "Low Traffic"  },
-  MODERATE:  { color: "text-[#9c5a1a]", bg: "bg-[#fff3e8]", border: "border-[#f0c080]", dot: "bg-[#c07820]", label: "Moderate"     },
-  BUSY:      { color: "text-[#b03030]", bg: "bg-[#fdeeee]", border: "border-[#f0b0b0]", dot: "bg-[#c03030]", label: "Busy"         },
-  VERY_BUSY: { color: "text-[#7a1010]", bg: "bg-[#fde8e8]", border: "border-[#e09090]", dot: "bg-[#a02020]", label: "Very Busy"    },
+  LOW: { color: "text-[#4a7a3d]", bg: "bg-[#e8efe5]", border: "border-[#b8d9b0]", dot: "bg-[#6b8a5e]", label: "Low Traffic" },
+  MODERATE: { color: "text-[#9c5a1a]", bg: "bg-[#fff3e8]", border: "border-[#f0c080]", dot: "bg-[#c07820]", label: "Moderate" },
+  BUSY: { color: "text-[#b03030]", bg: "bg-[#fdeeee]", border: "border-[#f0b0b0]", dot: "bg-[#c03030]", label: "Busy" },
+  VERY_BUSY: { color: "text-[#7a1010]", bg: "bg-[#fde8e8]", border: "border-[#e09090]", dot: "bg-[#a02020]", label: "Very Busy" },
 };
 
 const MAX_CHARS = 300;
@@ -73,11 +73,11 @@ export default function PublicDashView() {
   const { data, refetch } = usePolling<PublicStatus>("/api/dashboard/public");
   const { data: stats } = usePolling<DashboardStats>("/api/dashboard/stats");
 
-  const [draft, setDraft]           = useState("");
-  const [saving, setSaving]         = useState(false);
-  const [saveMsg, setSaveMsg]       = useState<string | null>(null);
+  const [draft, setDraft] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
   const [crowdSaving, setCrowdSaving] = useState(false);
-  const [crowdMsg, setCrowdMsg]     = useState<string | null>(null);
+  const [crowdMsg, setCrowdMsg] = useState<string | null>(null);
 
   useEffect(() => {
     if (data?.announcement?.text && !draft) setDraft(data.announcement.text);
@@ -173,7 +173,6 @@ export default function PublicDashView() {
         staff={staff}
       />
 
-      {/* Sub-nav */}
       <div className="bg-white border-b border-[#e5e5e0] px-4 md:px-7 flex items-center justify-between">
         <div className="py-2.5">
           <span className="text-sm font-semibold text-[#2d2d2d] border-b-2 border-[#6b8a5e] pb-2.5">
@@ -194,7 +193,6 @@ export default function PublicDashView() {
 
       <div className="p-4 md:p-7 flex flex-col gap-6">
 
-        {/* ── Stats row ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             icon={DoorOpen}
@@ -229,13 +227,10 @@ export default function PublicDashView() {
           </div>
         </div>
 
-        {/* ── Main grid ── */}
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6 items-start">
 
-          {/* LEFT */}
           <div className="flex flex-col gap-5">
 
-            {/* Announcement editor */}
             <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
               <div className="px-5 py-4 border-b border-[#e5e5e0] flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[#fff3e8] flex items-center justify-center">
@@ -321,7 +316,6 @@ export default function PublicDashView() {
                   </div>
                 </div>
 
-                {/* Live preview */}
                 {draft.trim() && (
                   <div>
                     <p className="text-[11px] font-semibold text-[#9e9e9e] uppercase tracking-wider mb-2">Display preview</p>
@@ -332,7 +326,6 @@ export default function PublicDashView() {
                   </div>
                 )}
 
-                {/* Current announcement status */}
                 {current?.text && (
                   <div className={`rounded-lg px-4 py-3 flex items-start gap-3 border ${current.isVisible ? "bg-[#fffbf0] border-[#f0e0a0]" : "bg-[#f5f5f0] border-[#e5e5e0]"}`}>
                     <CheckCircle2 size={15} className={`shrink-0 mt-0.5 ${current.isVisible ? "text-[#a07820]" : "text-[#9e9e9e]"}`} />
@@ -355,7 +348,6 @@ export default function PublicDashView() {
               </div>
             </div>
 
-            {/* Crowd trend */}
             <div className="bg-white border border-[#e5e5e0] rounded-xl p-5">
               <div className="flex items-center justify-between mb-5">
                 <div>
@@ -400,10 +392,8 @@ export default function PublicDashView() {
             </div>
           </div>
 
-          {/* RIGHT */}
           <div className="flex flex-col gap-4">
 
-            {/* Display screen card */}
             <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
               <div className="px-5 py-4 border-b border-[#e5e5e0] flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[#f0f5ef] flex items-center justify-center">
@@ -415,11 +405,9 @@ export default function PublicDashView() {
                 </div>
               </div>
 
-              {/* Screen preview mockup */}
               <div className="px-5 pt-4 pb-2">
                 <div className={`rounded-xl overflow-hidden border-2 ${cfg.border} ${cfg.bg}`}>
                   <div className="px-4 py-4 flex flex-col gap-2.5">
-                    {/* header bar */}
                     <div className="flex items-center justify-between">
                       <div className="h-1.5 w-14 bg-[#e5e5e0] rounded-full" />
                       <div className="flex items-center gap-1">
@@ -427,21 +415,18 @@ export default function PublicDashView() {
                         <div className="h-1.5 w-8 bg-[#e5e5e0] rounded-full" />
                       </div>
                     </div>
-                    {/* crowd level */}
                     <div className="text-center py-1.5">
                       <div className={`text-2xl font-black ${cfg.color}`}>
                         {cfg.label.toUpperCase()}
                       </div>
                       <div className={`text-[9px] mt-1 truncate px-2 ${cfg.color} opacity-70`}>{data?.message ?? ""}</div>
                     </div>
-                    {/* announcement */}
                     {current?.text && current.isVisible && (
                       <div className="bg-white border border-[#e5e5e0] rounded-lg px-2.5 py-1.5 flex items-start gap-1.5">
                         <Megaphone size={8} className="text-[#a07820] shrink-0 mt-0.5" />
                         <p className="text-[8px] text-[#5a4a20] leading-tight line-clamp-2">{current.text}</p>
                       </div>
                     )}
-                    {/* mini trend bars */}
                     <div className="flex justify-center gap-1 pt-0.5">
                       {trend.map((s) => {
                         const h = Math.max((s.people / maxPeople) * 16, s.people > 0 ? 4 : 2);
@@ -456,7 +441,6 @@ export default function PublicDashView() {
                     </div>
                   </div>
                 </div>
-                {/* monitor stand */}
                 <div className="flex flex-col items-center mt-1 mb-1.5">
                   <div className="h-2 w-6 bg-[#e5e5e0]" />
                   <div className="h-1 w-12 bg-[#d5d5d0] rounded-sm" />
@@ -477,7 +461,6 @@ export default function PublicDashView() {
               </div>
             </div>
 
-            {/* Manual crowd override */}
             <div className="bg-white border border-[#e5e5e0] rounded-xl overflow-hidden">
               <div className="px-4 py-3 border-b border-[#e5e5e0] flex items-center gap-2">
                 <Sliders size={14} className="text-[#6b8a5e]" />
@@ -527,7 +510,6 @@ export default function PublicDashView() {
               </div>
             </div>
 
-            {/* Service hours */}
             <div className="bg-white border border-[#e5e5e0] rounded-xl p-4">
               <p className="text-xs font-semibold text-[#9e9e9e] uppercase tracking-wider mb-3">Service Hours</p>
               <div className="flex items-center justify-between">
@@ -541,7 +523,6 @@ export default function PublicDashView() {
               </div>
             </div>
 
-            {/* Tips */}
             <div className="bg-[#f0f5ef] border border-[#c8dfc2] rounded-xl p-4">
               <p className="text-xs font-semibold text-[#4a7a3d] mb-3">Setup tips</p>
               <ul className="text-xs text-[#6b8a5e] space-y-2 leading-relaxed">

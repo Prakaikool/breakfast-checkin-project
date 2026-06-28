@@ -57,7 +57,6 @@ export default function Sidebar({
 
   return (
     <>
-      {/* ── Mobile backdrop ── */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-20 bg-black/40 backdrop-blur-sm lg:hidden"
@@ -65,29 +64,24 @@ export default function Sidebar({
         />
       )}
 
-      {/* ── Sidebar panel ── */}
       <aside
         className={cn(
           'fixed left-0 top-0 h-screen bg-[#2c3e2d] flex flex-col z-30',
           'transition-all duration-300 ease-in-out',
-          // Width: collapsed = 56px, expanded = 200px
           collapsed ? 'w-14' : 'w-50',
           // Mobile: hidden unless mobileOpen (always expanded when open on mobile)
           mobileOpen ? 'translate-x-0 w-50' : '-translate-x-full lg:translate-x-0',
         )}
       >
-        {/* ── Logo / brand ── */}
         <div
           className={cn(
             'flex items-center shrink-0 h-15 overflow-hidden',
             collapsed ? 'justify-center px-0' : 'px-5 gap-2'
           )}
         >
-          {/* Icon mark — always visible */}
           <div className="w-7 h-7 rounded-lg bg-[#6b8a5e] flex items-center justify-center shrink-0">
             <UtensilsCrossed size={14} className="text-white" />
           </div>
-          {/* Wordmark — hidden when collapsed */}
           {!collapsed && (
             <span className="text-[15px] font-bold text-white leading-none whitespace-nowrap overflow-hidden">
               Breakfast
@@ -97,7 +91,6 @@ export default function Sidebar({
 
         <div className="h-px bg-white/10 shrink-0" />
 
-        {/* ── User info ── */}
         <div
           className={cn(
             'flex items-center shrink-0 py-3 overflow-hidden',
@@ -119,7 +112,6 @@ export default function Sidebar({
 
         <div className="h-px bg-white/10 mx-3 shrink-0" />
 
-        {/* ── Navigation ── */}
         <nav className="flex-1 px-2 py-2 space-y-0.5 overflow-y-auto overflow-x-hidden">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -142,7 +134,6 @@ export default function Sidebar({
                 {!collapsed && (
                   <span className="truncate">{item.label}</span>
                 )}
-                {/* Tooltip when collapsed */}
                 {collapsed && (
                   <span className="absolute left-full ml-2 px-2 py-1 bg-[#1a2a1b] text-white text-xs rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-lg">
                     {item.label}
@@ -153,11 +144,9 @@ export default function Sidebar({
           })}
         </nav>
 
-        {/* ── Footer: logout + collapse toggle ── */}
         <div className="px-2 pb-4 shrink-0">
           <div className="h-px bg-white/10 mb-2" />
 
-          {/* Logout */}
           <button
             onClick={onLogout}
             title={collapsed ? 'Logout' : undefined}
@@ -175,7 +164,6 @@ export default function Sidebar({
             )}
           </button>
 
-          {/* Collapse toggle — desktop only */}
           <button
             onClick={onToggleCollapse}
             className={cn(
