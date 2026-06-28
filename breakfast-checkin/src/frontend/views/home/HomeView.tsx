@@ -10,6 +10,9 @@ import {
   Clock,
   ChevronRight,
   Check,
+  Users,
+  Activity,
+  ShieldAlert,
   type LucideIcon,
 } from "lucide-react";
 import TopBar from "@/frontend/components/layout/TopBar";
@@ -17,11 +20,11 @@ import { useAuth } from "@/frontend/hooks/useAuth";
 import { usePolling } from "@/frontend/hooks/usePolling";
 import type { DashboardStats, ActivityLevel, CheckInRecord } from "@/types";
 
-const statCards = [
-  { key: "checkIns", label: "Check-ins Today", iconBg: "bg-[#e8efe5]" },
-  { key: "guests", label: "Guests Inside", iconBg: "bg-[#e5eff3]" },
-  { key: "activity", label: "Activity Level", iconBg: "bg-[#fff3e8]" },
-  { key: "duplicates", label: "Duplicates Blocked", iconBg: "bg-[#fdeeee]" },
+const statCards: { key: string; label: string; iconBg: string; iconText: string; icon: LucideIcon }[] = [
+  { key: "checkIns",   label: "Check-ins Today",    iconBg: "bg-[#e8efe5]", iconText: "text-[#4a7a3d]", icon: CheckCircle  },
+  { key: "guests",     label: "Guests Inside",       iconBg: "bg-[#e5eff3]", iconText: "text-[#3d6a7a]", icon: Users        },
+  { key: "activity",   label: "Activity Level",      iconBg: "bg-[#fff3e8]", iconText: "text-[#a05c1e]", icon: Activity     },
+  { key: "duplicates", label: "Duplicates Blocked",  iconBg: "bg-[#fdeeee]", iconText: "text-[#a04040]", icon: ShieldAlert  },
 ];
 
 const actionCards: {
@@ -150,7 +153,9 @@ export default function HomeView() {
               className="bg-white border border-[#e5e5e0] rounded-xl p-4 flex flex-col gap-2"
             >
               <div className="flex items-center gap-3">
-                <div className={`${card.iconBg} rounded-[10px] w-9 h-9 shrink-0`} />
+                <div className={`${card.iconBg} ${card.iconText} rounded-[10px] w-9 h-9 shrink-0 flex items-center justify-center`}>
+                  <card.icon size={18} />
+                </div>
                 <p className="text-xs text-[#6b6b6b]">{card.label}</p>
               </div>
               <p className="text-2xl font-bold text-[#2d2d2d] mt-1">
