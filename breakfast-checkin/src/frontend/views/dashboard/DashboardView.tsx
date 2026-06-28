@@ -177,7 +177,7 @@ export default function DashboardView() {
             </div>
 
             <div className="mt-4 bg-[#f5f5f0] rounded-lg px-4 py-2 text-xs text-[#6b6b6b]">
-              Peak expected: 08:30 – 09:30 · Prepare for ~85 guests
+              Peak expected: 08:30 – 09:30
             </div>
           </div>
         </div>
